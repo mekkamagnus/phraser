@@ -338,7 +338,11 @@ export default function PhraseList() {
       {/* Card-based layout for phrases */}
       <div className="space-y-4"> {/* Changed from table to card layout */}
         {filteredPhrases.map((phrase) => (
-          <div key={phrase.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm"> {/* Card styling */}
+          <div
+            key={phrase.id}
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => router.push(`/phrases/${phrase.id}`)}
+          > {/* Card styling */}
             <div className="flex justify-between items-start mb-3"> {/* Added margin */}
               <div className="flex-1">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-1"> {/* Language label */}
@@ -349,7 +353,10 @@ export default function PhraseList() {
                 </div>
               </div>
               <button
-                onClick={() => handleDelete(phrase.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(phrase.id);
+                }}
                 className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 font-medium text-base p-2 min-w-[44px] min-h-[44px]" // Increased touch target size
               >
                 Delete
@@ -375,7 +382,10 @@ export default function PhraseList() {
                     >
                       {tag}
                       <button
-                        onClick={() => handleRemoveTag(phrase.id, tag)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveTag(phrase.id, tag);
+                        }}
                         className="ml-1.5 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
                       >
                         ×
@@ -388,7 +398,7 @@ export default function PhraseList() {
               </div>
 
               {/* Tag input for this phrase */}
-              <div className="mt-3 flex">
+              <div className="mt-3 flex" onClick={(e) => e.stopPropagation()}>
                 <input
                   type="text"
                   placeholder="Add tag..."
