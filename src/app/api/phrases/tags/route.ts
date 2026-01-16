@@ -8,13 +8,13 @@ import { createErrorResponse } from '@/lib/errorHandler';
 // Schema for updating tags on a phrase
 const updateTagsSchema = z.object({
   phraseId: z.number(),
-  tags: z.array(z.string()),
+  tagNames: z.array(z.string()), // Renamed to avoid conflict with the tags schema
 });
 
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json();
-    const { phraseId, tags } = updateTagsSchema.parse(body);
+    const { phraseId, tagNames: tagNames } = updateTagsSchema.parse(body);
 
     // Verify the phrase exists
     const phrase = await db
@@ -39,8 +39,8 @@ export async function PUT(req: NextRequest) {
 
     // Determine which tags to add and which to remove
     const currentTagNames = currentPhraseTags.map(t => t.tagName);
-    const tagsToAdd = tags.filter(tag => !currentTagNames.includes(tag));
-    const tagsToRemove = currentTagNames.filter(tag => !tags.includes(tag));
+    const tagsToAdd = tagNames.filter(tag => !currentTagNames.includes(tag));
+    const tagsToRemove = currentTagNames.filter(tag => !tagNames.includes(tag));
 
     // Add new tags
     for (const tagName of tagsToAdd) {
@@ -95,14 +95,14 @@ export async function PUT(req: NextRequest) {
       JSON.stringify({
         message: 'Tags updated successfully',
         phraseId,
-        tags,
+        tags: tagNames,
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new Response(
-        JSON.stringify({ error: 'Invalid input data', details: error.errors }),
+        JSON.stringify({ error: 'Invalid input data', details: error.issues }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }

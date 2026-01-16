@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
       translation: string;
       sourceLanguage: string;
       targetLanguage: string;
-      createdAt: number;
+      createdAt: number | Date;  // Allow both types since DB returns Date but we might convert to number
       tags: string[];
     }>();
 
@@ -64,7 +64,9 @@ export async function GET(req: NextRequest) {
           translation: record.translation,
           sourceLanguage: record.sourceLanguage,
           targetLanguage: record.targetLanguage,
-          createdAt: record.createdAt,
+          createdAt: typeof record.createdAt === 'number'
+            ? record.createdAt
+            : Math.floor(record.createdAt.getTime() / 1000), // Convert Date to Unix timestamp if needed
           tags: record.tagName ? [record.tagName] : [],
         });
       } else {
@@ -102,7 +104,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new Response(
-        JSON.stringify({ error: 'Invalid query parameters', details: error.errors }),
+        JSON.stringify({ error: 'Invalid query parameters', details: error.issues }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -143,7 +145,8 @@ export async function DELETE(req: NextRequest) {
       .delete(phrases)
       .where(eq(phrases.id, phraseId));
 
-    if (deletedRecords.rowsAffected === 0) {
+    // Check if any records were affected by the deletion
+    if ('changes' in deletedRecords && deletedRecords.changes === 0) {
       return new Response(
         JSON.stringify({ error: 'Phrase not found' }),
         { status: 404, headers: { 'Content-Type': 'application/json' } }

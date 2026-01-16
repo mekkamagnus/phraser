@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
       translation: string;
       sourceLanguage: string;
       targetLanguage: string;
-      createdAt: number;
+      createdAt: number;  // The schema defines this as integer with timestamp mode
       tags: string[];
     }>();
 
@@ -41,7 +41,9 @@ export async function GET(req: NextRequest) {
           translation: record.translation,
           sourceLanguage: record.sourceLanguage,
           targetLanguage: record.targetLanguage,
-          createdAt: record.createdAt,
+          createdAt: typeof record.createdAt === 'number'
+            ? record.createdAt
+            : Math.floor(record.createdAt.getTime() / 1000), // Convert Date to Unix timestamp if needed
           tags: record.tagName ? [record.tagName] : [],
         });
       } else {

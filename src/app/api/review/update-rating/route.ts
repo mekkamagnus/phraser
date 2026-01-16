@@ -88,9 +88,9 @@ export async function POST(request: NextRequest) {
         easeFactor: Math.round(ef * 100), // Convert back to integer
         interval,
         repetitions,
-        nextReviewDate,
-        lastReviewDate: now,
-        updatedAt: now
+        nextReviewDate: new Date(nextReviewDate * 1000), // Convert Unix timestamp to Date object
+        lastReviewDate: new Date(now * 1000), // Convert Unix timestamp to Date object
+        updatedAt: new Date(now * 1000) // Convert Unix timestamp to Date object
       })
       .where(eq(srsData.phraseId, phraseId));
 

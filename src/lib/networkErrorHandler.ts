@@ -10,7 +10,7 @@ export interface RetryOptions {
 }
 
 export interface ApiResponse<T = any> {
-  data: T;
+  data: T | null;
   status: number;
   headers: Headers;
 }
