@@ -1,6 +1,7 @@
 #!/bin/bash
 # Ralph Wiggum - Long-running AI agent loop
 # Usage: ./ralph.sh [max_iterations]
+# Note: This script uses Qwen instead of Claude as the AI agent
 
 set -e
 
@@ -92,10 +93,10 @@ for i in $(seq 1 $MAX_ITERATIONS); do
   echo "  Ralph Iteration $i of $MAX_ITERATIONS"
   echo "═══════════════════════════════════════════════════════"
   
-  # Run Claude Code with the ralph prompt (non-interactive mode)
+  # Run Qwen Code with the ralph prompt (non-interactive mode)
   # Save output to temp file for completion check
   TEMP_OUTPUT=$(mktemp)
-  cd "$PROJECT_ROOT" && cat "$SCRIPT_DIR/prompt.md" | claude -p --dangerously-skip-permissions --allowed-tools "Read,Write,Edit,Glob,Grep,AskUserQuestion,Bash,TodoWrite" 2>&1 | tee "$TEMP_OUTPUT"
+  cd "$PROJECT_ROOT" && cat "$SCRIPT_DIR/prompt.md" | qwen -p --dangerously-skip-permissions --allowed-tools "Read,Write,Edit,Glob,Grep,AskUserQuestion,Bash,TodoWrite" 2>&1 | tee "$TEMP_OUTPUT"
 
   # Check for completion signal
   if grep -q "<promise>COMPLETE</promise>" "$TEMP_OUTPUT"; then
