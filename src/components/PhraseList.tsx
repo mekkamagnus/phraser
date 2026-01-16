@@ -256,11 +256,11 @@ export default function PhraseList() {
   return (
     <div className="space-y-6">
       {/* Search and Filter Controls */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow"> {/* More rounded corners and adjusted padding */}
+        <div className="grid grid-cols-1 gap-4"> {/* Changed to single column for mobile */}
           {/* Search Bar */}
           <div>
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"> {/* Increased margin */}
               Search Phrases
             </label>
             <input
@@ -269,20 +269,20 @@ export default function PhraseList() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search source or translation..."
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-base" // Increased padding and font size for mobile
             />
           </div>
 
           {/* Language Pair Filter */}
           <div>
-            <label htmlFor="languagePair" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label htmlFor="languagePair" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"> {/* Increased margin */}
               Filter by Language Pair
             </label>
             <select
               id="languagePair"
               value={selectedLanguagePair}
               onChange={(e) => setSelectedLanguagePair(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-base" // Increased padding and font size for mobile
             >
               <option value="">All Language Pairs</option>
               {allLanguagePairs.map(pair => (
@@ -293,10 +293,10 @@ export default function PhraseList() {
 
           {/* Tags Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"> {/* Increased margin */}
               Filter by Tags
             </label>
-            <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700">
+            <div className="flex flex-wrap gap-3 max-h-32 overflow-y-auto p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700"> {/* Increased gap and padding */}
               {allTags.map(tag => (
                 <label key={tag} className="inline-flex items-center">
                   <input
@@ -309,9 +309,9 @@ export default function PhraseList() {
                         setSelectedTags(selectedTags.filter(t => t !== tag));
                       }
                     }}
-                    className="rounded text-blue-600 focus:ring-blue-500"
+                    className="h-5 w-5 rounded text-blue-600 focus:ring-blue-500" // Increased size for mobile
                   />
-                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{tag}</span>
+                  <span className="ml-2 text-base text-gray-700 dark:text-gray-300">{tag}</span> {/* Increased font size */}
                 </label>
               ))}
             </div>
@@ -321,7 +321,7 @@ export default function PhraseList() {
 
       {/* Results Info and Export Button */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="text-sm text-gray-600 dark:text-gray-400">
+        <div className="text-base text-gray-600 dark:text-gray-400"> {/* Increased font size */}
           Showing {filteredPhrases.length} of {phrases.length} phrases
           {searchQuery && ` matching "${searchQuery}"`}
           {selectedLanguagePair && ` in ${selectedLanguagePair}`}
@@ -329,82 +329,97 @@ export default function PhraseList() {
         </div>
         <button
           onClick={handleExportToAnki}
-          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors text-sm"
+          className="px-5 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-base" // Increased padding and font size for mobile
         >
           Export to Anki
         </button>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
-          <thead className="bg-gray-100 dark:bg-gray-700">
-            <tr>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Source Phrase</th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Translation</th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Language Pair</th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Tags</th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Date Saved</th>
-              <th className="py-3 px-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {filteredPhrases.map((phrase) => (
-              <tr key={phrase.id} className="hover:bg-gray-50 dark:hover:bg-gray-750">
-                <td className="py-3 px-4 text-gray-800 dark:text-gray-200">{phrase.sourcePhrase}</td>
-                <td className="py-3 px-4 text-gray-800 dark:text-gray-200">{phrase.translation}</td>
-                <td className="py-3 px-4">
-                  <span className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded">
-                    {phrase.languagePair}
-                  </span>
-                </td>
-                <td className="py-3 px-4">
-                  {phrase.tags && phrase.tags.length > 0 ? (
-                    <div className="flex flex-wrap gap-1">
-                      {phrase.tags.map((tag, idx) => (
-                        <span
-                          key={idx}
-                          className="inline-flex items-center bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded"
-                        >
-                          {tag}
-                          <button
-                            onClick={() => handleRemoveTag(phrase.id, tag)}
-                            className="ml-1 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <span className="text-gray-400 italic">No tags</span>
-                  )}
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      placeholder="Add tag..."
-                      value={editingTags[phrase.id] || ''}
-                      onChange={(e) => handleTagInputChange(phrase.id, e.target.value)}
-                      onKeyDown={(e) => handleTagInputKeyDown(e, phrase.id)}
-                      className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                    />
-                  </div>
-                </td>
-                <td className="py-3 px-4 text-gray-600 dark:text-gray-400">
-                  {new Date(phrase.createdAt * 1000).toLocaleDateString()}
-                </td>
-                <td className="py-3 px-4 text-right">
-                  <button
-                    onClick={() => handleDelete(phrase.id)}
-                    className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 font-medium text-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Card-based layout for phrases */}
+      <div className="space-y-4"> {/* Changed from table to card layout */}
+        {filteredPhrases.map((phrase) => (
+          <div key={phrase.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm"> {/* Card styling */}
+            <div className="flex justify-between items-start mb-3"> {/* Added margin */}
+              <div className="flex-1">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1"> {/* Language label */}
+                  {LANGUAGES[phrase.sourceLanguage as keyof typeof LANGUAGES]}
+                </div>
+                <div className="text-lg font-medium text-gray-800 dark:text-gray-200"> {/* Source phrase */}
+                  {phrase.sourcePhrase}
+                </div>
+              </div>
+              <button
+                onClick={() => handleDelete(phrase.id)}
+                className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 font-medium text-base p-2 min-w-[44px] min-h-[44px]" // Increased touch target size
+              >
+                Delete
+              </button>
+            </div>
+
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3"> {/* Separator with more spacing */}
+              <div className="text-sm text-gray-500 dark:text-gray-400 mb-1"> {/* Language label */}
+                {LANGUAGES[phrase.targetLanguage as keyof typeof LANGUAGES]}
+              </div>
+              <div className="text-lg font-medium text-gray-800 dark:text-gray-200"> {/* Translation */}
+                {phrase.translation}
+              </div>
+            </div>
+
+            <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700"> {/* Tags section */}
+              <div className="flex flex-wrap gap-2">
+                {phrase.tags && phrase.tags.length > 0 ? (
+                  phrase.tags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center px-3 py-1.5 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-sm rounded-full"
+                    >
+                      {tag}
+                      <button
+                        onClick={() => handleRemoveTag(phrase.id, tag)}
+                        className="ml-1.5 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-gray-400 italic text-sm">No tags</span>
+                )}
+              </div>
+
+              {/* Tag input for this phrase */}
+              <div className="mt-3 flex">
+                <input
+                  type="text"
+                  placeholder="Add tag..."
+                  value={editingTags[phrase.id] || ''}
+                  onChange={(e) => handleTagInputChange(phrase.id, e.target.value)}
+                  onKeyDown={(e) => handleTagInputKeyDown(e, phrase.id)}
+                  className="flex-1 px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-l-lg focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-gray-700 dark:text-white" // Increased padding and font size
+                />
+                <button
+                  onClick={() => {
+                    const tagValue = editingTags[phrase.id]?.trim();
+                    if (tagValue) {
+                      addTagToPhrase(phrase.id, tagValue);
+                      setEditingTags(prev => ({
+                        ...prev,
+                        [phrase.id]: ''
+                      }));
+                    }
+                  }}
+                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white px-4 py-2 rounded-r-lg transition-colors text-base" // Increased padding and font size
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-3 text-sm text-gray-500 dark:text-gray-400"> {/* Date info */}
+              {new Date(phrase.createdAt * 1000).toLocaleDateString()} • {phrase.languagePair}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Pagination Controls */}
@@ -413,27 +428,27 @@ export default function PhraseList() {
           <button
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-5 py-3 rounded-lg ${
               currentPage === 1
                 ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700 text-white'
-            }`}
+            } text-base`} // Increased padding and font size for mobile
           >
             Previous
           </button>
 
-          <span className="text-gray-700 dark:text-gray-300">
+          <span className="text-gray-700 dark:text-gray-300 text-base"> {/* Increased font size */}
             Page {currentPage} of {totalPages}
           </span>
 
           <button
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-5 py-3 rounded-lg ${
               currentPage === totalPages
                 ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700 text-white'
-            }`}
+            } text-base`} // Increased padding and font size for mobile
           >
             Next
           </button>

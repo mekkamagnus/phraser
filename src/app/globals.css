@@ -44,4 +44,9 @@ body {
   .rotate-y-0 {
     transform: rotateY(0deg);
   }
+
+  /* Mobile-specific utility classes */
+  .min-h-screen-mobile {
+    min-height: 100svh; /* Use svh for better mobile viewport height */
+  }
 }
