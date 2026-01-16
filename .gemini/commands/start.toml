@@ -1,0 +1,2 @@
+description = "Start the application with a 300s timeout"
+prompt = "sh ./scripts/start.sh 300s"

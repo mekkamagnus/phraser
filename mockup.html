@@ -1137,6 +1137,232 @@
                 </div>
             </div>
         </div>
+
+        <!-- Review Completed Screen -->
+        <div>
+            <div class="screen-title">sc06 - Review Completed</div>
+            <div class="iphone-frame">
+                <div class="iphone-notch"></div>
+                <div class="iphone-screen dark-mode">
+                    <header class="header">
+                        <div class="nav-container">
+                            <div class="logo">Phraser</div>
+                            <div class="hamburger" onclick="toggleMobileMenu()">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="nav-links">
+                                <a href="#" class="nav-link">Translate</a>
+                                <a href="#" class="nav-link">Browse</a>
+                                <a href="#" class="nav-link active">Review</a>
+                                <a href="#" class="nav-link">Stats</a>
+                                <a href="#" class="nav-link">Tags</a>
+                            </div>
+                        </div>
+                         <div class="mobile-menu" id="mobileMenu">
+                            <div class="mobile-nav-links">
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Translate</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Browse</a>
+                                <a href="#" class="mobile-nav-link active" onclick="closeMobileMenu()">Review</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Stats</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Tags</a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main class="main-content" style="display: flex; flex-direction: column; justify-content: center; text-align: center;">
+                        <h1 style="font-size: 28px; font-weight: bold; margin-bottom: 16px; color: white;">Review Completed!</h1>
+                        <p style="font-size: 18px; color: #d1d5db; margin-bottom: 32px;">Great job! You have finished your review session.</p>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <button style="width: 100%; background-color: #3b82f6; color: white; padding: 16px; border-radius: 12px; border: none; font-size: 16px; font-weight: 500;">Back to Review</button>
+                            <button style="width: 100%; background-color: #4b5563; color: white; padding: 16px; border-radius: 12px; border: none; font-size: 16px; font-weight: 500;">Translate More Phrases</button>
+                            <button style="width: 100%; background-color: #4b5563; color: white; padding: 16px; border-radius: 12px; border: none; font-size: 16px; font-weight: 500;">Browse Saved Phrases</button>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tag Details Screen -->
+        <div>
+            <div class="screen-title">sc07 - Tag Details</div>
+            <div class="iphone-frame">
+                <div class="iphone-notch"></div>
+                <div class="iphone-screen dark-mode">
+                    <header class="header">
+                        <div class="nav-container">
+                            <div class="logo">Phraser</div>
+                            <div class="hamburger" onclick="toggleMobileMenu()">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="nav-links">
+                                <a href="#" class="nav-link">Translate</a>
+                                <a href="#" class="nav-link">Browse</a>
+                                <a href="#" class="nav-link">Review</a>
+                                <a href="#" class="nav-link">Stats</a>
+                                <a href="#" class="nav-link active">Tags</a>
+                            </div>
+                        </div>
+                         <div class="mobile-menu" id="mobileMenu">
+                            <div class="mobile-nav-links">
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Translate</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Browse</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Review</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Stats</a>
+                                <a href="#" class="mobile-nav-link active" onclick="closeMobileMenu()">Tags</a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main class="main-content">
+                        <a href="#" style="display: inline-flex; align-items: center; color: #60a5fa; text-decoration: none; margin-bottom: 16px; font-size: 16px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Back to Tags
+                        </a>
+
+                        <div style="margin-bottom: 24px;">
+                            <h1 style="font-size: 24px; font-weight: bold; color: white;">Tag: <span style="color: #60a5fa;">greeting</span></h1>
+                            <p style="color: #9ca3af; margin-top: 8px; font-size: 16px;">2 phrases with this tag</p>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                                <div style="display: flex; justify-content: space-between; align-items-start; margin-bottom: 8px;">
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">English</div>
+                                        <div style="font-size: 18px; color: #1f2937; font-weight: 500;">Hello, how are you?</div>
+                                    </div>
+                                </div>
+                                <div style="border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 12px;">
+                                    <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">Spanish</div>
+                                    <div style="font-size: 18px; color: #1f2937; font-weight: 500;">¡Hola, ¿cómo estás?</div>
+                                </div>
+                                <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <span style="display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1d4ed8; border-radius: 16px; font-size: 12px;">greeting</span>
+                                    <span style="display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1d4ed8; border-radius: 16px; font-size: 12px;">basics</span>
+                                </div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                                <div style="display: flex; justify-content: space-between; align-items-start; margin-bottom: 8px;">
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">English</div>
+                                        <div style="font-size: 18px; color: #1f2937; font-weight: 500;">Good morning</div>
+                                    </div>
+                                </div>
+                                <div style="border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 12px;">
+                                    <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">Spanish</div>
+                                    <div style="font-size: 18px; color: #1f2937; font-weight: 500;">Buenos días</div>
+                                </div>
+                                <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <span style="display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1d4ed8; border-radius: 16px; font-size: 12px;">greeting</span>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phrase Details Screen -->
+        <div>
+            <div class="screen-title">sc08 - Phrase Details</div>
+            <div class="iphone-frame">
+                <div class="iphone-notch"></div>
+                <div class="iphone-screen dark-mode">
+                    <header class="header">
+                        <div class="nav-container">
+                            <div class="logo">Phraser</div>
+                            <div class="hamburger" onclick="toggleMobileMenu()">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="nav-links">
+                                <a href="#" class="nav-link">Translate</a>
+                                <a href="#" class="nav-link active">Browse</a>
+                                <a href="#" class="nav-link">Review</a>
+                                <a href="#" class="nav-link">Stats</a>
+                                <a href="#" class="nav-link">Tags</a>
+                            </div>
+                        </div>
+                         <div class="mobile-menu" id="mobileMenu">
+                            <div class="mobile-nav-links">
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Translate</a>
+                                <a href="#" class="mobile-nav-link active" onclick="closeMobileMenu()">Browse</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Review</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Stats</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Tags</a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main class="main-content">
+                        <a href="#" style="display: inline-flex; align-items: center; color: #9ca3af; text-decoration: none; margin-bottom: 16px; font-size: 16px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Back
+                        </a>
+
+                        <div style="background: #1f2937; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                            <div style="background: #374151; padding: 16px; border-bottom: 1px solid #4b5563; display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-size: 14px; color: #d1d5db; font-weight: 500;">English → Spanish</div>
+                                <div style="font-size: 12px; color: #9ca3af;">Added Jan 15, 2026</div>
+                            </div>
+
+                            <div style="padding: 24px;">
+                                <div style="margin-bottom: 24px;">
+                                    <div style="font-size: 14px; color: #9ca3af; margin-bottom: 4px;">Source Phrase</div>
+                                    <div style="font-size: 24px; font-weight: bold; color: white;">Hello, how are you?</div>
+                                </div>
+
+                                <div style="padding-top: 24px; border-top: 1px solid #374151; margin-bottom: 24px;">
+                                    <div style="font-size: 14px; color: #9ca3af; margin-bottom: 4px;">Translation</div>
+                                    <div style="font-size: 24px; font-weight: bold; color: #60a5fa;">¡Hola, ¿cómo estás?</div>
+                                </div>
+
+                                <div style="padding-top: 24px; border-top: 1px solid #374151; margin-bottom: 24px;">
+                                    <div style="font-size: 14px; color: #9ca3af; margin-bottom: 12px;">Tags</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                        <span style="display: inline-block; padding: 4px 12px; background: #064e3b; color: #a7f3d0; border-radius: 16px; font-size: 14px;">greeting</span>
+                                        <span style="display: inline-block; padding: 4px 12px; background: #064e3b; color: #a7f3d0; border-radius: 16px; font-size: 14px;">basics</span>
+                                    </div>
+                                </div>
+
+                                <div style="padding-top: 24px; border-top: 1px solid #374151;">
+                                    <div style="font-size: 14px; color: #9ca3af; margin-bottom: 12px;">Review Statistics</div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                        <div style="background: #111827; padding: 12px; border-radius: 8px; text-align: center;">
+                                            <div style="font-size: 12px; color: #9ca3af;">Repetitions</div>
+                                            <div style="font-size: 18px; font-weight: bold; color: white;">5</div>
+                                        </div>
+                                        <div style="background: #111827; padding: 12px; border-radius: 8px; text-align: center;">
+                                            <div style="font-size: 12px; color: #9ca3af;">Interval</div>
+                                            <div style="font-size: 18px; font-weight: bold; color: white;">12 days</div>
+                                        </div>
+                                        <div style="background: #111827; padding: 12px; border-radius: 8px; text-align: center;">
+                                            <div style="font-size: 12px; color: #9ca3af;">Ease Factor</div>
+                                            <div style="font-size: 18px; font-weight: bold; color: white;">2.50</div>
+                                        </div>
+                                        <div style="background: #111827; padding: 12px; border-radius: 8px; text-align: center;">
+                                            <div style="font-size: 12px; color: #9ca3af;">Next Review</div>
+                                            <div style="font-size: 18px; font-weight: bold; color: white;">Jan 27</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>

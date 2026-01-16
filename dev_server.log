@@ -1,0 +1,13 @@
+   ▲ Next.js 15.5.9
+   - Local:        http://localhost:3500
+   - Network:      http://192.168.10.7:3500
+   - Environments: .env
+   - Experiments (use with caution):
+     ✓ testProxy
+
+ ✓ Starting...
+ ✓ Ready in 2.4s
+ ○ Compiling / ...
+ ✓ Compiled / in 2.6s (737 modules)
+✓ Database migrations completed
+ HEAD / 200 in 3696ms
