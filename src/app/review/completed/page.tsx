@@ -9,7 +9,7 @@ export default function ReviewCompletedPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl text-center">
       <h1 className="text-3xl font-bold mb-6">Review Completed!</h1>
-      <p className="text-xl mb-8">Great job! You've finished your review session.</p>
+      <p className="text-xl mb-8">Great job! You have finished your review session.</p>
       
       <div className="space-y-4">
         <button
