@@ -25,9 +25,9 @@ describe('db-init', () => {
       // Since we can't easily mock the imported migrate function, we'll test the logic differently
       // by checking if migrationRan variable prevents multiple runs
 
-      // Reset the module to test the singleton behavior
-      const module = await import('../db-init');
-      const originalEnsureMigrations = module.ensureMigrations;
+      // Reset to test the singleton behavior
+      const importedModule = await import('../db-init');
+      const originalEnsureMigrations = importedModule.ensureMigrations;
 
       // Since we can't reset the closure variable easily, we'll just test that the function exists
       expect(originalEnsureMigrations).toBeInstanceOf(Function);
