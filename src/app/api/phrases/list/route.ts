@@ -3,6 +3,7 @@ import { db } from '@/db';
 import { phrases, phraseTags, tags } from '@/db/schema';
 import { eq, desc, and, asc } from 'drizzle-orm';
 import { z } from 'zod';
+import { createErrorResponse } from '@/lib/errorHandler';
 
 const getPhrasesSchema = z.object({
   page: z.string().transform(Number).optional().default(1),
@@ -29,9 +30,12 @@ export async function GET(req: NextRequest) {
         sourceLanguage: phrases.sourceLanguage,
         targetLanguage: phrases.targetLanguage,
         createdAt: phrases.createdAt,
+        tagName: tags.name,
       })
       .from(phrases)
-      .orderBy(desc(phrases.createdAt))
+      .leftJoin(phraseTags, eq(phrases.id, phraseTags.phraseId))
+      .leftJoin(tags, eq(phraseTags.tagId, tags.id))
+      .orderBy(desc(phrases.createdAt), asc(phrases.id), asc(tags.name))
       .limit(limit)
       .offset(offset);
 
@@ -41,39 +45,74 @@ export async function GET(req: NextRequest) {
       .from(phrases);
     const totalCount = totalCountResult.length;
 
+    // Group records by phrase ID to collect all tags for each phrase
+    const groupedPhrases = new Map<number, {
+      id: number;
+      sourcePhrase: string;
+      translation: string;
+      sourceLanguage: string;
+      targetLanguage: string;
+      createdAt: number;
+      tags: string[];
+    }>();
+
+    phraseRecords.forEach(record => {
+      if (!groupedPhrases.has(record.id)) {
+        groupedPhrases.set(record.id, {
+          id: record.id,
+          sourcePhrase: record.sourcePhrase,
+          translation: record.translation,
+          sourceLanguage: record.sourceLanguage,
+          targetLanguage: record.targetLanguage,
+          createdAt: record.createdAt,
+          tags: record.tagName ? [record.tagName] : [],
+        });
+      } else {
+        const existing = groupedPhrases.get(record.id)!;
+        if (record.tagName && !existing.tags.includes(record.tagName)) {
+          existing.tags.push(record.tagName);
+        }
+      }
+    });
+
     // Format the response
-    const formattedPhrases = phraseRecords.map(record => ({
-      id: record.id,
-      sourcePhrase: record.sourcePhrase,
-      translation: record.translation,
-      sourceLanguage: record.sourceLanguage,
-      targetLanguage: record.targetLanguage,
-      createdAt: record.createdAt,
-      languagePair: `${record.sourceLanguage}-${record.targetLanguage}`,
+    const formattedPhrases = Array.from(groupedPhrases.values()).map(phrase => ({
+      id: phrase.id,
+      sourcePhrase: phrase.sourcePhrase,
+      translation: phrase.translation,
+      sourceLanguage: phrase.sourceLanguage,
+      targetLanguage: phrase.targetLanguage,
+      createdAt: phrase.createdAt,
+      languagePair: `${phrase.sourceLanguage}-${phrase.targetLanguage}`,
+      tags: phrase.tags,
     }));
 
-    return Response.json({
-      phrases: formattedPhrases,
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(totalCount / limit),
-        totalItems: totalCount,
-        itemsPerPage: limit,
-      },
-    });
+    return new Response(
+      JSON.stringify({
+        phrases: formattedPhrases,
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(totalCount / limit),
+          totalItems: totalCount,
+          itemsPerPage: limit,
+        },
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return Response.json(
-        { error: 'Invalid query parameters', details: error.errors },
-        { status: 400 }
+      return new Response(
+        JSON.stringify({ error: 'Invalid query parameters', details: error.errors }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    console.error('Error fetching phrases:', error);
-    return Response.json(
-      { error: 'Failed to fetch phrases' },
-      { status: 500 }
-    );
+    if (error instanceof Error) {
+      return createErrorResponse(error, { url: req.url });
+    } else {
+      const unknownError = new Error('Unknown error occurred while fetching phrases');
+      return createErrorResponse(unknownError, { url: req.url });
+    }
   }
 }
 
@@ -82,20 +121,20 @@ export async function DELETE(req: NextRequest) {
   try {
     const url = new URL(req.url);
     const phraseIdStr = url.pathname.split('/').pop(); // Get the last part of the path
-    
+
     if (!phraseIdStr) {
-      return Response.json(
-        { error: 'Phrase ID is required' },
-        { status: 400 }
+      return new Response(
+        JSON.stringify({ error: 'Phrase ID is required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
     const phraseId = parseInt(phraseIdStr, 10);
-    
+
     if (isNaN(phraseId)) {
-      return Response.json(
-        { error: 'Invalid phrase ID' },
-        { status: 400 }
+      return new Response(
+        JSON.stringify({ error: 'Invalid phrase ID' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
@@ -105,20 +144,24 @@ export async function DELETE(req: NextRequest) {
       .where(eq(phrases.id, phraseId));
 
     if (deletedRecords.rowsAffected === 0) {
-      return Response.json(
-        { error: 'Phrase not found' },
-        { status: 404 }
+      return new Response(
+        JSON.stringify({ error: 'Phrase not found' }),
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    return Response.json({
-      message: 'Phrase deleted successfully',
-    });
-  } catch (error) {
-    console.error('Error deleting phrase:', error);
-    return Response.json(
-      { error: 'Failed to delete phrase' },
-      { status: 500 }
+    return new Response(
+      JSON.stringify({
+        message: 'Phrase deleted successfully',
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
+  } catch (error) {
+    if (error instanceof Error) {
+      return createErrorResponse(error, { url: req.url });
+    } else {
+      const unknownError = new Error('Unknown error occurred while deleting phrase');
+      return createErrorResponse(unknownError, { url: req.url });
+    }
   }
 }

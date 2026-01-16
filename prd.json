@@ -8,6 +8,29 @@
     "coverageThreshold": 80,
     "description": "ALL features MUST be developed using Test-Driven Development (TDD). Write tests BEFORE implementing functionality. No code should be committed without passing tests."
   },
+  "errorHandlingRequirements": {
+    "enabled": true,
+    "description": "Implement centralized error handling throughout the application to ensure consistent error responses, logging, and user feedback.",
+    "requirements": [
+      "Global error boundary for catching unexpected errors in React components",
+      "Centralized API error handling with consistent response format",
+      "Client-side error logging with stack traces",
+      "Server-side error logging with context information",
+      "Graceful degradation when services are unavailable",
+      "User-friendly error messages that don't expose sensitive information",
+      "Error recovery mechanisms where appropriate",
+      "Network error handling with retry logic for API calls",
+      "Database error handling with appropriate fallbacks",
+      "Validation error handling with clear feedback to users"
+    ],
+    "testing": [
+      "Unit tests for error handling utilities",
+      "Integration tests for error boundaries",
+      "API error response tests",
+      "Network failure simulation tests",
+      "Database error handling tests"
+    ]
+  },
   "userStories": [
     {
       "id": "US-0.1",
@@ -95,7 +118,7 @@
     {
       "id": "US-2.3",
       "title": "Search & Filter Phrases",
-      "passes": false,
+      "passes": true,
       "priority": 2,
       "acceptanceCriteria": [
         "Search bar filters by source phrase OR translation",
@@ -111,7 +134,7 @@
     {
       "id": "US-2.4",
       "title": "Manage Tags",
-      "passes": false,
+      "passes": true,
       "priority": 3,
       "acceptanceCriteria": [
         "Add tags when saving a phrase (optional)",
@@ -128,7 +151,7 @@
     {
       "id": "US-3.1",
       "title": "Flashcard Review Mode",
-      "passes": false,
+      "passes": true,
       "priority": 1,
       "acceptanceCriteria": [
         "Start Review button on main navigation",
@@ -147,7 +170,7 @@
     {
       "id": "US-3.2",
       "title": "Simple Spaced Repetition (SRS)",
-      "passes": false,
+      "passes": true,
       "priority": 2,
       "acceptanceCriteria": [
         "Store SRS data for each phrase: ease factor, interval, next review date",
@@ -163,7 +186,7 @@
     {
       "id": "US-3.3",
       "title": "Review Statistics",
-      "passes": false,
+      "passes": true,
       "priority": 4,
       "acceptanceCriteria": [
         "Dashboard showing: total cards, cards due today, cards reviewed today",
@@ -178,7 +201,7 @@
     {
       "id": "US-4.1",
       "title": "Export to Anki Format",
-      "passes": false,
+      "passes": true,
       "priority": 3,
       "acceptanceCriteria": [
         "Export button in phrase management view",
@@ -223,6 +246,28 @@
         "TESTS: Language code validation tests",
         "TESTS: Bidirectional translation tests",
         "TESTS: Language name lookup tests"
+      ]
+    },
+    {
+      "id": "US-6.1",
+      "title": "Centralized Error Handling",
+      "passes": true,
+      "priority": 2,
+      "acceptanceCriteria": [
+        "Global error boundary component to catch unexpected React errors",
+        "Custom error page for displaying errors to users",
+        "Consistent error response format across all API routes",
+        "Error logging utility with context information",
+        "Network error handling with retry mechanism for API calls",
+        "Database error handling with appropriate fallbacks",
+        "User-friendly error messages that don't expose sensitive information",
+        "Toast notifications for displaying errors to users",
+        "Error reporting for analytics/debugging",
+        "TESTS: Error boundary component tests",
+        "TESTS: API error response tests",
+        "TESTS: Network failure simulation tests",
+        "TESTS: Database error handling tests",
+        "TESTS: Error message sanitization tests"
       ]
     }
   ]

@@ -36,3 +36,7 @@
 - Database transactions should be handled carefully to maintain data integrity
 - UI components should provide clear feedback for all user actions
 - Testing with Bun has limitations with certain native modules like better-sqlite3
+- For flip animations, use CSS 3D transforms with preserve-3d and backface-visibility properties
+- SM-2 algorithm for spaced repetition requires storing ease factor, interval, and repetition counts
+- Randomizing content presentation (source vs translation) enhances learning effectiveness
+- Proper state management is crucial for maintaining progression in review flows

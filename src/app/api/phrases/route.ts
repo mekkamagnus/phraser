@@ -3,12 +3,14 @@ import { db } from '@/db';
 import { phrases, tags, phraseTags } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { z } from 'zod';
+import { createErrorResponse } from '@/lib/errorHandler';
 
 const savePhraseSchema = z.object({
   sourcePhrase: z.string().min(1),
   translation: z.string().min(1),
   sourceLanguage: z.string().min(1),
   targetLanguage: z.string().min(1),
+  tags: z.array(z.string()).optional().default([]),
 });
 
 export async function POST(req: NextRequest) {
@@ -30,9 +32,9 @@ export async function POST(req: NextRequest) {
       .limit(1);
 
     if (existingPhrase.length > 0) {
-      return Response.json(
-        { error: 'Phrase already saved with this language pair' },
-        { status: 409 }
+      return new Response(
+        JSON.stringify({ error: 'Phrase already saved with this language pair' }),
+        { status: 409, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
@@ -49,43 +51,75 @@ export async function POST(req: NextRequest) {
 
     // Create or get the language pair tag (e.g., "en-es")
     const languagePairTag = `${sourceLanguage}-${targetLanguage}`;
-    let tag = await db
+    let languageTag = await db
       .select()
       .from(tags)
       .where(eq(tags.name, languagePairTag))
       .limit(1);
 
-    if (tag.length === 0) {
-      // Create the tag if it doesn't exist
+    if (languageTag.length === 0) {
+      // Create the language pair tag if it doesn't exist
       const [newTag] = await db
         .insert(tags)
         .values({ name: languagePairTag })
         .returning();
-      tag = [newTag];
+      languageTag = [newTag];
     }
 
     // Associate the phrase with the language pair tag
     await db.insert(phraseTags).values({
       phraseId: newPhrase.id,
-      tagId: tag[0].id,
+      tagId: languageTag[0].id,
     });
 
-    return Response.json({
-      message: 'Phrase saved successfully',
-      phraseId: newPhrase.id,
-    });
+    // Process additional tags if provided
+    if (body.tags && Array.isArray(body.tags) && body.tags.length > 0) {
+      for (const tagName of body.tags) {
+        if (typeof tagName === 'string' && tagName.trim() !== '') {
+          let tagRecord = await db
+            .select()
+            .from(tags)
+            .where(eq(tags.name, tagName.trim()))
+            .limit(1);
+
+          if (tagRecord.length === 0) {
+            // Create the tag if it doesn't exist
+            const [newTag] = await db
+              .insert(tags)
+              .values({ name: tagName.trim() })
+              .returning();
+            tagRecord = [newTag];
+          }
+
+          // Associate the phrase with the tag
+          await db.insert(phraseTags).values({
+            phraseId: newPhrase.id,
+            tagId: tagRecord[0].id,
+          });
+        }
+      }
+    }
+
+    return new Response(
+      JSON.stringify({
+        message: 'Phrase saved successfully',
+        phraseId: newPhrase.id,
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return Response.json(
-        { error: 'Invalid input data', details: error.errors },
-        { status: 400 }
+      return new Response(
+        JSON.stringify({ error: 'Invalid input data', details: error.errors }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    console.error('Error saving phrase:', error);
-    return Response.json(
-      { error: 'Failed to save phrase' },
-      { status: 500 }
-    );
+    if (error instanceof Error) {
+      return createErrorResponse(error, { url: req.url });
+    } else {
+      const unknownError = new Error('Unknown error occurred while saving phrase');
+      return createErrorResponse(unknownError, { url: req.url });
+    }
   }
 }

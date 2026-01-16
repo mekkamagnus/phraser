@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { LANGUAGES, getLanguageCodes, type LanguageCode } from '@/lib/languages';
+import { makeApiCall, NetworkErrorHandler } from '@/lib/networkErrorHandler';
+import { useToast } from '@/components/Toast';
 
 interface TranslationResult {
   translation?: string;
@@ -27,6 +29,10 @@ export default function TranslationInput() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [error, setError] = useState('');
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [tagsInput, setTagsInput] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+
+  const { addToast } = useToast();
 
   const handleTranslate = async () => {
     if (!phrase.trim()) {
@@ -40,7 +46,7 @@ export default function TranslationInput() {
     setSaveSuccess(false);
 
     try {
-      const response = await fetch('/api/translate', {
+      const result = await makeApiCall<TranslationResult>('/api/translate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,22 +56,26 @@ export default function TranslationInput() {
           sourceLanguage: LANGUAGES[sourceLanguage],
           targetLanguage: LANGUAGES[targetLanguage],
         }),
+      }, {
+        maxRetries: 2,
+        delay: 500,
+        backoffMultiplier: 1.5,
+        retryableStatusCodes: [408, 429, 500, 502, 503, 504],
       });
 
-      const data: TranslationResult = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Translation failed');
+      if (result.error) {
+        addToast(result.error, 'error');
+        throw new Error(result.error);
       }
 
-      if (data.translation) {
-        setTranslation(data.translation);
+      if (result.data?.translation) {
+        setTranslation(result.data.translation);
 
         // Add to history
         const newHistoryItem: HistoryItem = {
           id: Date.now(), // Simple ID generation
           sourcePhrase: phrase,
-          translation: data.translation,
+          translation: result.data.translation,
           sourceLanguage,
           targetLanguage,
           timestamp: new Date(),
@@ -76,7 +86,9 @@ export default function TranslationInput() {
         throw new Error('No translation received');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
+      addToast(errorMessage, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -84,7 +96,9 @@ export default function TranslationInput() {
 
   const handleSave = async () => {
     if (!phrase.trim() || !translation.trim()) {
-      setError('Nothing to save');
+      const errorMsg = 'Nothing to save';
+      setError(errorMsg);
+      addToast(errorMsg, 'error');
       return;
     }
 
@@ -93,7 +107,7 @@ export default function TranslationInput() {
     setSaveSuccess(false);
 
     try {
-      const response = await fetch('/api/phrases', {
+      const result = await makeApiCall('/api/phrases', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -103,25 +117,38 @@ export default function TranslationInput() {
           translation,
           sourceLanguage,
           targetLanguage,
+          tags: [...tags], // Send the tags array
         }),
+      }, {
+        maxRetries: 2,
+        delay: 500,
+        backoffMultiplier: 1.5,
+        retryableStatusCodes: [408, 429, 500, 502, 503, 504],
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 409) {
-          setError('This phrase is already saved with this language pair');
+      if (result.error) {
+        if (result.status === 409) {
+          const errorMsg = 'This phrase is already saved with this language pair';
+          setError(errorMsg);
+          addToast(errorMsg, 'error');
         } else {
-          throw new Error(data.error || 'Failed to save phrase');
+          addToast(result.error, 'error');
+          throw new Error(result.error);
         }
         return;
       }
 
       setSaveSuccess(true);
+      addToast('Phrase saved successfully!', 'success');
       // Clear success message after 3 seconds
       setTimeout(() => setSaveSuccess(false), 3000);
+      // Reset tags after successful save
+      setTags([]);
+      setTagsInput('');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while saving');
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred while saving';
+      setError(errorMessage);
+      addToast(errorMessage, 'error');
     } finally {
       setIsSaving(false);
     }
@@ -132,18 +159,38 @@ export default function TranslationInput() {
       const text = await navigator.clipboard.readText();
       setPhrase(text);
     } catch (err) {
-      setError('Unable to paste from clipboard');
+      const errorMsg = 'Unable to paste from clipboard';
+      setError(errorMsg);
+      addToast(errorMsg, 'error');
+    }
+  };
+
+  const handleAddTag = () => {
+    if (tagsInput.trim() && !tags.includes(tagsInput.trim())) {
+      setTags([...tags, tagsInput.trim()]);
+      setTagsInput('');
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',' || e.key === ';') {
+      e.preventDefault();
+      handleAddTag();
     }
   };
 
   const handleCopyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      // Optionally show a success message
-      alert('Copied to clipboard!');
+      addToast('Copied to clipboard!', 'success');
     } catch (err) {
       console.error('Failed to copy: ', err);
-      alert('Failed to copy to clipboard');
+      const errorMsg = 'Failed to copy to clipboard';
+      addToast(errorMsg, 'error');
     }
   };
 
@@ -237,6 +284,52 @@ export default function TranslationInput() {
             <p className="text-lg text-gray-900 dark:text-white font-medium">
               {translation}
             </p>
+
+            {/* Tags Input */}
+            <div className="mt-4">
+              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Add Tags (optional)
+              </label>
+              <div className="flex">
+                <input
+                  id="tags"
+                  type="text"
+                  value={tagsInput}
+                  onChange={(e) => setTagsInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Type a tag and press Enter..."
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddTag}
+                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white px-4 py-2 rounded-r-md transition-colors"
+                >
+                  Add
+                </button>
+              </div>
+
+              {/* Display current tags */}
+              {tags.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveTag(tag)}
+                        className="ml-1 inline-flex items-center text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Save Button */}
             <div className="mt-4 flex justify-end">

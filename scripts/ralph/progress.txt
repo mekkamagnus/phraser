@@ -162,3 +162,187 @@ Started: 2025-01-16
 - Copy to clipboard requires proper error handling for cross-browser compatibility
 - History UI should be scrollable when many items are present
 
+
+## [2025-01-16] - US-3.1
+
+**Implemented:**
+- Flashcard Review Mode functionality completed
+- Added "Review" link to main navigation header
+- Created /review page with flashcard interface
+- Implemented randomized display of source phrase or translation
+- Added flip animation to reveal answer using CSS transforms
+- Created rating buttons: Again, Hard, Good, Easy
+- Implemented SM-2 algorithm for spaced repetition scheduling
+- Added progress indicator showing current card / total cards
+- Created /review/completed page for review completion
+- Added navigation between cards after rating
+- Created review utility functions (getDueCards, updateCardRating)
+
+**Files Changed:**
+- src/components/Header.tsx - Added "Review" navigation link
+- src/app/review/page.tsx - Main review interface with flashcards
+- src/app/review/completed/page.tsx - Review completion page
+- src/lib/review.ts - SRS algorithm and review utility functions
+- src/lib/types.ts - Phrase interface definition
+- src/app/globals.css - Added CSS classes for flip animation
+- prd.json - Updated US-3.1 to passes: true
+
+**Learnings for future iterations:**
+- When implementing flip animations, use CSS 3D transforms with preserve-3d and backface-visibility
+- SM-2 algorithm requires storing ease factor, interval, and repetitions for each card
+- Randomizing card content (source vs translation) improves learning effectiveness
+- Proper state management is crucial for maintaining card progression during review
+- Need to handle database compatibility issues when testing with Bun (better-sqlite3 incompatibility)
+
+
+## [2025-01-16] - US-3.2
+
+**Implemented:**
+- Simple Spaced Repetition (SRS) functionality completed as part of US-3.1
+- SRS data stored for each phrase: ease factor, interval, next review date
+- SM-2 algorithm calculates next review date based on user rating
+- Only cards due for review are shown (next_review_date <= now)
+- Shows "All cards reviewed for today!" message when no cards are due
+- All SRS functionality was implemented in src/lib/review.ts with SM-2 algorithm
+
+**Files Changed:**
+- src/lib/review.ts - Complete SRS implementation with SM-2 algorithm
+- src/app/review/page.tsx - Logic to show only due cards
+- prd.json - Updated US-3.2 to passes: true
+
+**Learnings for future iterations:**
+- SRS implementation can be shared between multiple user stories
+- SM-2 algorithm requires careful handling of ease factors and intervals
+- Timestamp calculations need to account for Unix timestamps in seconds
+
+
+## [2025-01-16] - US-2.3
+
+**Implemented:**
+- Search & Filter Phrases functionality completed
+- Added search bar that filters by source phrase OR translation (case-insensitive)
+- Added language pair filter dropdown showing all unique language pairs
+- Added multi-select tag filter with checkboxes for all available tags
+- Implemented real-time filtering as user types or selects filters
+- Updated API endpoint to return tags associated with each phrase
+- Enhanced PhraseList component with search/filter UI controls
+- Added visual feedback showing active filters and result counts
+
+**Files Changed:**
+- src/components/PhraseList.tsx - Enhanced with search and filtering UI
+- src/app/api/phrases/list/route.ts - Updated to return tags with phrases
+- prd.json - Updated US-2.3 to passes: true
+
+**Learnings for future iterations:**
+- When fetching related data (phrases with tags), use JOINs and group results appropriately
+- Real-time filtering provides better UX than search-on-submit
+- Multi-select filters work well with checkbox interfaces
+- Visual feedback on active filters helps users understand current state
+
+
+## [2025-01-16] - US-2.4
+
+**Implemented:**
+- Manage Tags functionality completed
+- Added optional tag input when saving a phrase in TranslationInput component
+- Implemented add/edit tags on saved phrases in PhraseList component
+- Added tag autocomplete functionality (by pressing Enter, comma, or semicolon)
+- Enabled removing individual tags from phrases
+- Created /tags page to view all tags used across all phrases
+- Added "Tags" link to main navigation header
+- Created API endpoints for managing tags on existing phrases
+- Implemented PUT /api/phrases/tags for updating phrase tags
+- Implemented GET /api/phrases/tags for retrieving all system tags
+
+**Files Changed:**
+- src/components/TranslationInput.tsx - Added tag input when saving phrases
+- src/components/PhraseList.tsx - Added tag editing functionality to each phrase
+- src/app/api/phrases/route.ts - Updated to accept tags when saving phrases
+- src/app/api/phrases/tags/route.ts - Created new API endpoints for tag management
+- src/app/tags/page.tsx - Created page to view all tags in the system
+- src/components/Header.tsx - Added "Tags" navigation link
+- prd.json - Updated US-2.4 to passes: true
+
+**Learnings for future iterations:**
+- Many-to-many relationships require careful handling of associations in both directions
+- Tag editing UI works well with inline input fields per phrase
+- Keyboard shortcuts (Enter, comma, semicolon) improve tag input UX
+- Separate API endpoints for tag management keep concerns organized
+
+
+## [2025-01-16] - US-4.1
+
+**Implemented:**
+- Export to Anki Format functionality completed
+- Added "Export to Anki" button in phrase management view (PhraseList component)
+- Created API endpoint at /api/export/anki for generating CSV export
+- Implemented CSV generation with UTF-8 encoding and proper BOM
+- CSV format includes: source phrase, translation, and tags
+- File includes all fields needed for Anki import
+- Download dialog triggers automatically when export button is clicked
+- Proper CSV escaping implemented to handle quotes and special characters
+- Added UTF-8 BOM to ensure proper character encoding in various systems
+
+**Files Changed:**
+- src/components/PhraseList.tsx - Added export button and download functionality
+- src/app/api/export/anki/route.ts - Created API endpoint for CSV generation
+- prd.json - Updated US-4.1 to passes: true
+
+**Learnings for future iterations:**
+- CSV generation requires proper escaping of quotes and special characters
+- UTF-8 BOM (\uFEFF) ensures proper encoding recognition across platforms
+- Using dedicated API endpoints for exports keeps functionality organized
+- Client-side download triggers work well with blob responses from API endpoints
+
+
+## [2025-01-16] - US-3.3
+
+**Implemented:**
+- Review Statistics functionality completed
+- Created dashboard showing total cards, cards due today, and cards reviewed today
+- Implemented streak counter to track consecutive days of review
+- Added last review date display to the dashboard
+- Created API endpoint at /api/stats/review for calculating statistics
+- Developed accurate streak calculation algorithm considering consecutive days
+- Created /dashboard page with responsive statistics cards
+- Added "Stats" link to main navigation header
+- Implemented proper date handling for daily statistics
+
+**Files Changed:**
+- src/app/api/stats/review/route.ts - Created API endpoint for statistics
+- src/app/dashboard/page.tsx - Created statistics dashboard page
+- src/components/Header.tsx - Added "Stats" navigation link
+- prd.json - Updated US-3.3 to passes: true
+
+**Learnings for future iterations:**
+- Streak calculations require careful date handling to account for consecutive days
+- API endpoints for statistics should aggregate data efficiently from multiple tables
+- Dashboard UI benefits from clear, visually distinct metric cards
+- Date comparisons in Unix timestamps need conversion for proper day-based calculations
+
+
+## [2026-01-16] - US-6.1
+- Implemented comprehensive centralized error handling system
+- Created global error boundary component for catching React errors
+- Created custom error page for displaying errors to users
+- Implemented consistent error response format across all API routes
+- Created error logging utility with context information
+- Implemented network error handling with retry mechanism for API calls
+- Enhanced all API routes with proper database error handling and fallbacks
+- Created user-friendly error messages that don't expose sensitive information
+- Implemented toast notifications for displaying errors to users
+- Added error reporting for analytics/debugging
+- Created comprehensive test suite covering all error handling scenarios
+- Updated all client components to use new error handling and toast notifications
+- Files changed: src/components/ErrorBoundary.tsx, src/app/error.tsx, src/lib/errorHandler.ts, src/lib/networkErrorHandler.ts, src/components/Toast.tsx, src/app/layout.tsx, src/components/TranslationInput.tsx, src/components/PhraseList.tsx, and all API route files
+
+- **Learnings for future iterations:**
+  - This codebase uses a centralized error handling approach with consistent response formats
+  - All API routes should use the createErrorResponse function for consistent error responses
+  - Client components should use the makeApiCall utility with retry logic for network resilience
+  - Toast notifications provide better UX for error messaging compared to inline alerts
+  - Error messages should always be sanitized to prevent exposure of sensitive information
+  - The error boundary pattern catches unexpected React errors gracefully
+  - Database error handling should include proper fallbacks and user-friendly messages
+---
+

@@ -153,6 +153,21 @@ Phraser is a language learning assistant that helps learners lookup, save, manag
   - Support for bidirectional translation (any pair)
   - Store language pair with each saved phrase
 
+### Epic 6: Centralized Error Handling
+
+**US-6.1: Centralized Error Handling**
+- As a user, I want the application to handle errors gracefully, so that I receive meaningful feedback when something goes wrong.
+- Acceptance Criteria:
+  - Global error boundary component to catch unexpected React errors
+  - Custom error page for displaying errors to users
+  - Consistent error response format across all API routes
+  - Error logging utility with context information
+  - Network error handling with retry mechanism for API calls
+  - Database error handling with appropriate fallbacks
+  - User-friendly error messages that don't expose sensitive information
+  - Toast notifications for displaying errors to users
+  - Error reporting for analytics/debugging
+
 ## Non-Functional Requirements
 
 ### Performance
@@ -171,6 +186,18 @@ Phraser is a language learning assistant that helps learners lookup, save, manag
 - No cloud sync or external analytics
 - API key stored in environment variables only
 - No user tracking or telemetry
+
+### Error Handling
+- Global error boundaries to catch unexpected React errors
+- Consistent error response format across all API routes
+- Client-side error logging with stack traces
+- Server-side error logging with context information
+- Graceful degradation when services are unavailable
+- User-friendly error messages that don't expose sensitive information
+- Error recovery mechanisms where appropriate
+- Network error handling with retry logic for API calls
+- Database error handling with appropriate fallbacks
+- Validation error handling with clear feedback to users
 
 ## Out of Scope (Future Features)
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ensureMigrations } from "@/lib/db-init";
 import Header from "@/components/Header";
+import { ToastProvider } from "@/components/Toast";
 
 // Run migrations on app startup
 ensureMigrations().catch((err) => {
@@ -21,10 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <Header />
-        <main>
-          {children}
-        </main>
+        <ToastProvider>
+          <Header />
+          <main>
+            {children}
+          </main>
+        </ToastProvider>
       </body>
     </html>
   );

@@ -25,15 +25,45 @@ export default function Header() {
             >
               Translate
             </Link>
-            <Link 
+            <Link
               href="/browse"
               className={`font-medium ${
-                pathname === '/browse' 
-                  ? 'text-blue-600 dark:text-blue-400' 
+                pathname === '/browse'
+                  ? 'text-blue-600 dark:text-blue-400'
                   : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
               }`}
             >
               Browse
+            </Link>
+            <Link
+              href="/review"
+              className={`font-medium ${
+                pathname === '/review'
+                  ? 'text-blue-600 dark:text-blue-400'
+                  : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
+              }`}
+            >
+              Review
+            </Link>
+            <Link
+              href="/dashboard"
+              className={`font-medium ${
+                pathname === '/dashboard'
+                  ? 'text-blue-600 dark:text-blue-400'
+                  : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
+              }`}
+            >
+              Stats
+            </Link>
+            <Link
+              href="/tags"
+              className={`font-medium ${
+                pathname === '/tags'
+                  ? 'text-blue-600 dark:text-blue-400'
+                  : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white'
+              }`}
+            >
+              Tags
             </Link>
           </div>
         </nav>
