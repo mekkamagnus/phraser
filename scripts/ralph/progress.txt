@@ -1,0 +1,45 @@
+# Ralph Progress Log
+
+Started: 2025-01-16
+
+---
+
+## Codebase Patterns
+
+- **Project Stack**: Next.js 15 with App Router, TypeScript, Tailwind CSS, Drizzle ORM + SQLite
+- **Database Schema**: Use Drizzle ORM's sqliteTable with proper foreign key references and cascade deletes
+- **Component Structure**: Client components ('use client') for interactivity, stored in src/components/
+- **API Routes**: Next.js App Router API routes in src/app/api/[route]/route.ts
+- **Environment Variables**: Use .env file for API keys (DEEPSEEK_API_KEY)
+- **Mobile-First Design**: Use Tailwind's responsive utilities with mobile-first approach
+
+---
+
+## [2025-01-16] - US-1.1, US-5.1, US-5.2
+
+**Completed Stories:**
+- US-1.1: Quick Translation Input - Full translation interface with language selectors, paste functionality, loading states
+- US-5.1: SQLite Database Setup - Complete Drizzle ORM setup with 4 tables (phrases, tags, phrase_tags, srs_data)
+- US-5.2: Language Pair Configuration - 9 languages configured (en, es, fr, de, it, pt, zh, ja, ko)
+
+**Files Created:**
+- src/db/schema.ts - Database schema with all 4 tables
+- src/db/index.ts - Database connection and export
+- src/db/migrate.ts - Migration runner
+- src/lib/languages.ts - Language configuration
+- src/lib/utils.ts - Utility functions (cn for classnames)
+- src/components/TranslationInput.tsx - Main translation UI component
+- src/app/api/translate/route.ts - DeepSeek API integration
+- src/app/layout.tsx - Root layout with metadata
+- src/app/page.tsx - Homepage
+- src/app/globals.css - Tailwind styles
+- package.json, tsconfig.json, next.config.js, tailwind.config.ts, drizzle.config.ts
+- .env - DeepSeek API key configuration
+
+**Learnings for future iterations:**
+- When creating translation components, store both sourceLanguage and targetLanguage as full language names for the API, but use codes internally for efficiency
+- DeepSeek API requires a specific message format with system prompt for translation context
+- Use better-sqlite3 for local SQLite databases (synchronous, faster than sqlite3 for Node.js)
+- Drizzle ORM migrations are stored in drizzle/ directory with meta/ folder for migration metadata
+- For SRS data, store ease_factor as integer (2.5 * 100 = 250) to avoid floating point precision issues
+- Database timestamps use Unix epoch in integer mode for SQLite compatibility

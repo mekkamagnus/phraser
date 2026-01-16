@@ -1,0 +1,157 @@
+{
+  "projectName": "Phraser",
+  "branchName": "feature/phraser-mvp",
+  "userStories": [
+    {
+      "id": "US-1.1",
+      "title": "Quick Translation Input",
+      "passes": true,
+      "priority": 1,
+      "acceptanceCriteria": [
+        "Primary input field on homepage",
+        "Support for paste action",
+        "Source language selector (dropdown)",
+        "Target language selector (dropdown)",
+        "Submit button to trigger translation",
+        "Loading state while fetching from DeepSeek API",
+        "Display translated phrase prominently"
+      ]
+    },
+    {
+      "id": "US-1.2",
+      "title": "Translation History",
+      "passes": false,
+      "priority": 3,
+      "acceptanceCriteria": [
+        "Display last 5 translations in session",
+        "Each entry shows: source phrase, translation, language pair, timestamp",
+        "Click to copy translation to clipboard"
+      ]
+    },
+    {
+      "id": "US-2.1",
+      "title": "Save Phrase to Database",
+      "passes": false,
+      "priority": 1,
+      "acceptanceCriteria": [
+        "Save button appears after translation is displayed",
+        "On save: store source phrase, translation, source language, target language, timestamp",
+        "Success confirmation (toast notification)",
+        "Prevent duplicate saves of same phrase+language pair",
+        "Auto-tag with language pair category"
+      ]
+    },
+    {
+      "id": "US-2.2",
+      "title": "Browse Saved Phrases",
+      "passes": false,
+      "priority": 2,
+      "acceptanceCriteria": [
+        "Paginated list view of saved phrases",
+        "Each entry shows: source phrase, translation, language pair, save date",
+        "Edit button for each phrase",
+        "Delete button for each phrase",
+        "Empty state when no phrases saved"
+      ]
+    },
+    {
+      "id": "US-2.3",
+      "title": "Search & Filter Phrases",
+      "passes": false,
+      "priority": 2,
+      "acceptanceCriteria": [
+        "Search bar filters by source phrase OR translation",
+        "Filter by language pair (dropdown)",
+        "Filter by tags (multi-select)",
+        "Real-time filtering as user types/selects"
+      ]
+    },
+    {
+      "id": "US-2.4",
+      "title": "Manage Tags",
+      "passes": false,
+      "priority": 3,
+      "acceptanceCriteria": [
+        "Add tags when saving a phrase (optional)",
+        "Add/edit tags on saved phrases",
+        "Tag input supports autocomplete from existing tags",
+        "Remove tags from phrases",
+        "View all tags used across all phrases"
+      ]
+    },
+    {
+      "id": "US-3.1",
+      "title": "Flashcard Review Mode",
+      "passes": false,
+      "priority": 1,
+      "acceptanceCriteria": [
+        "Start Review button on main navigation",
+        "Flashcard displays source phrase OR translation (randomized)",
+        "Flip animation to reveal answer",
+        "Self-rating buttons: Again, Hard, Good, Easy",
+        "Show next card after rating",
+        "Progress indicator (cards reviewed / total cards)"
+      ]
+    },
+    {
+      "id": "US-3.2",
+      "title": "Simple Spaced Repetition (SRS)",
+      "passes": false,
+      "priority": 2,
+      "acceptanceCriteria": [
+        "Store SRS data for each phrase: ease factor, interval, next review date",
+        "Calculate next review date based on user rating (Simplified SM-2 algorithm)",
+        "Only show cards due for review (next_review_date <= now)",
+        "If no cards due, show message All cards reviewed for today!"
+      ]
+    },
+    {
+      "id": "US-3.3",
+      "title": "Review Statistics",
+      "passes": false,
+      "priority": 4,
+      "acceptanceCriteria": [
+        "Dashboard showing: total cards, cards due today, cards reviewed today",
+        "Streak counter (consecutive days of review)",
+        "Last review date"
+      ]
+    },
+    {
+      "id": "US-4.1",
+      "title": "Export to Anki Format",
+      "passes": false,
+      "priority": 3,
+      "acceptanceCriteria": [
+        "Export button in phrase management view",
+        "Generate Anki-compatible CSV/UTF-8 file",
+        "Format: source phrase, translation, tags",
+        "File includes all fields needed for Anki import",
+        "Download dialog triggers automatically"
+      ]
+    },
+    {
+      "id": "US-5.1",
+      "title": "SQLite Database Setup",
+      "passes": true,
+      "priority": 1,
+      "acceptanceCriteria": [
+        "Initialize SQLite database with Drizzle ORM",
+        "Create tables: phrases, tags, phrase_tags, srs_data",
+        "Database file: phraser.db in project root",
+        "Run migrations on app startup"
+      ]
+    },
+    {
+      "id": "US-5.2",
+      "title": "Language Pair Configuration",
+      "passes": true,
+      "priority": 2,
+      "acceptanceCriteria": [
+        "Configuration object with common languages (English, Spanish, French, German, Italian, Portuguese, Chinese, Japanese, Korean)",
+        "Language selector dropdowns use this config",
+        "Support for bidirectional translation (any pair)",
+        "Store language pair with each saved phrase"
+      ]
+    }
+  ]
+}
