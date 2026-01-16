@@ -194,20 +194,26 @@ export default function TranslationInput() {
     }
   };
 
+  const handleSwapLanguages = () => {
+    const tempSource = sourceLanguage;
+    setSourceLanguage(targetLanguage);
+    setTargetLanguage(tempSource);
+  };
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 space-y-4"> {/* More rounded corners and adjusted padding */}
         {/* Language Selectors */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="sourceLanguage" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"> {/* Increased margin */}
+        <div className="flex items-end gap-2">
+          <div className="flex-1">
+            <label htmlFor="sourceLanguage" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               From
             </label>
             <select
               id="sourceLanguage"
               value={sourceLanguage}
               onChange={(e) => setSourceLanguage(e.target.value as LanguageCode)}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-base" // Increased padding and font size for mobile
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-base"
             >
               {getLanguageCodes().map((code) => (
                 <option key={code} value={code}>
@@ -216,15 +222,25 @@ export default function TranslationInput() {
               ))}
             </select>
           </div>
-          <div>
-            <label htmlFor="targetLanguage" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"> {/* Increased margin */}
+          <button
+            type="button"
+            onClick={handleSwapLanguages}
+            aria-label="Swap languages"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 mb-0.5"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+          </button>
+          <div className="flex-1">
+            <label htmlFor="targetLanguage" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               To
             </label>
             <select
               id="targetLanguage"
               value={targetLanguage}
               onChange={(e) => setTargetLanguage(e.target.value as LanguageCode)}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-base" // Increased padding and font size for mobile
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-base"
             >
               {getLanguageCodes().map((code) => (
                 <option key={code} value={code}>
