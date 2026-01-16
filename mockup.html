@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phraser App Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .screen-title {
+            text-align: center;
+            color: white;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .iphone-frame {
+            width: 375px;
+            height: 812px;
+            background: #1a1a1a;
+            border-radius: 40px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .iphone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .iphone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 30px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dark mode */
+        .dark-mode {
+            background: #111827;
+            color: white;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .dark-mode .header {
+            background: #1f2937;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px; /* Reduced height for mobile */
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .dark-mode .logo {
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px; /* Reduced gap for mobile */
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: #6b7280;
+            text-decoration: none;
+            padding: 12px; /* Increased touch target size */
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-size: 14px; /* Slightly smaller for mobile */
+        }
+
+        .nav-link.active {
+            color: #3b82f6;
+        }
+
+        .dark-mode .nav-link {
+            color: #9ca3af;
+        }
+
+        .dark-mode .nav-link.active {
+            color: #60a5fa;
+        }
+
+        .nav-link:hover {
+            background-color: #f3f4f6;
+        }
+
+        .dark-mode .nav-link:hover {
+            background-color: #374151;
+        }
+
+        /* Hamburger Menu Styles */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            height: 3px;
+            width: 100%;
+            background: #1f2937;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .hamburger span {
+            background: white;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            padding: 16px;
+            z-index: 99;
+        }
+
+        .dark-mode .mobile-menu {
+            background: #1f2937;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-nav-link {
+            display: block;
+            padding: 12px;
+            color: #6b7280;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .mobile-nav-link.active {
+            color: #3b82f6;
+        }
+
+        .dark-mode .mobile-nav-link {
+            color: #9ca3af;
+        }
+
+        .dark-mode .mobile-nav-link.active {
+            color: #60a5fa;
+        }
+
+        .mobile-nav-link:hover {
+            background-color: #f3f4f6;
+        }
+
+        .dark-mode .mobile-nav-link:hover {
+            background-color: #374151;
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 480px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .iphone-frame {
+                width: 100%;
+                height: 700px; /* Adjusted for smaller screens */
+                max-width: 400px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr; /* Always single column on small screens */
+            }
+
+            .rating-buttons {
+                grid-template-columns: 1fr; /* Always stack vertically on small screens */
+            }
+
+            .tags-grid {
+                grid-template-columns: 1fr; /* Single column on very small screens */
+            }
+        }
+
+        /* Main Content Styles */
+        .container-content {
+            padding: 16px;
+        }
+
+        .main-content {
+            min-height: calc(100vh - 56px); /* Adjusted for reduced header height */
+            padding: 24px 16px; /* Reduced padding for mobile */
+        }
+
+        /* Home Screen */
+        .home-title {
+            font-size: 28px; /* Slightly smaller for mobile */
+            font-weight: bold;
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .dark-mode .home-title {
+            color: white;
+        }
+
+        .home-subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 24px; /* Reduced margin for mobile */
+            font-size: 16px; /* Larger for better readability */
+        }
+
+        .dark-mode .home-subtitle {
+            color: #d1d5db;
+        }
+
+        .browse-button {
+            display: block;
+            width: 100%;
+            max-width: 240px; /* Wider for easier tapping */
+            margin: 0 auto 24px;
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 500;
+            padding: 16px 24px; /* Larger touch target */
+            border-radius: 12px; /* More rounded for mobile */
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            font-size: 16px; /* Larger text for readability */
+        }
+
+        .browse-button:hover {
+            background-color: #2563eb;
+        }
+
+        .translation-input {
+            background: white;
+            border-radius: 16px; /* More rounded for mobile */
+            padding: 20px; /* Reduced padding for mobile */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .translation-input {
+            background: #1f2937;
+        }
+
+        .language-selectors {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px; /* Reduced gap for mobile */
+            margin-bottom: 16px;
+        }
+
+        .selector-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px; /* Increased margin for readability */
+        }
+
+        .dark-mode .selector-label {
+            color: #d1d5db;
+        }
+
+        .selector {
+            width: 100%;
+            padding: 14px; /* Larger touch target */
+            border: 1px solid #d1d5db;
+            border-radius: 8px; /* More rounded for mobile */
+            background: white;
+            color: #1f2937;
+            font-size: 16px; /* Larger text for readability */
+            appearance: none; /* Remove default dropdown arrow */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .dark-mode .selector {
+            border-color: #4b5563;
+            background: #374151;
+            color: white;
+        }
+
+        .input-area {
+            margin-bottom: 16px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px; /* Increased margin for readability */
+        }
+
+        .dark-mode .input-label {
+            color: #d1d5db;
+        }
+
+        .textarea {
+            width: 100%;
+            padding: 14px; /* Larger touch target */
+            border: 1px solid #d1d5db;
+            border-radius: 8px; /* More rounded for mobile */
+            resize: vertical;
+            min-height: 120px; /* Taller for better typing experience */
+            background: white;
+            color: #1f2937;
+            font-size: 16px; /* Larger text for readability */
+        }
+
+        .dark-mode .textarea {
+            border-color: #4b5563;
+            background: #374151;
+            color: white;
+        }
+
+        .paste-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 12px; /* Larger touch target */
+            background: #f3f4f6;
+            border: none;
+            border-radius: 6px; /* More rounded */
+            font-size: 14px; /* Larger text */
+        }
+
+        .dark-mode .paste-button {
+            background: #4b5563;
+            color: white;
+        }
+
+        .translate-button {
+            width: 100%;
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 500;
+            padding: 16px 24px; /* Larger touch target */
+            border-radius: 12px; /* More rounded for mobile */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 16px; /* Larger text */
+        }
+
+        .translate-button:hover {
+            background-color: #2563eb;
+        }
+
+        .translate-button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 14px; /* Larger padding */
+            border-radius: 8px; /* More rounded */
+            margin: 12px 0;
+            font-size: 14px;
+        }
+
+        .dark-mode .error-message {
+            background: #7f1d1d;
+            border-color: #991b1b;
+            color: #fecaca;
+        }
+
+        .translation-result {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px; /* More rounded for mobile */
+            padding: 20px; /* Larger padding */
+            margin-top: 16px;
+        }
+
+        .dark-mode .translation-result {
+            background: #14532d;
+            border-color: #166534;
+        }
+
+        .result-label {
+            font-size: 16px; /* Larger for readability */
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 12px; /* Increased margin */
+        }
+
+        .dark-mode .result-label {
+            color: #d1d5db;
+        }
+
+        .result-text {
+            font-size: 20px; /* Larger for readability */
+            color: #1f2937;
+            font-weight: 500;
+            margin-bottom: 16px; /* Added margin */
+            line-height: 1.4; /* Better line height for readability */
+        }
+
+        .dark-mode .result-text {
+            color: white;
+        }
+
+        /* Browse Screen */
+        .browse-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 24px; /* Reduced margin for mobile */
+        }
+
+        .dark-mode .browse-title {
+            color: white;
+        }
+
+        .no-phrases {
+            text-align: center;
+            padding: 40px 16px; /* Reduced padding for mobile */
+            color: #6b7280;
+        }
+
+        .dark-mode .no-phrases {
+            color: #9ca3af;
+        }
+
+        /* Dashboard Screen */
+        .dashboard-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 24px; /* Reduced margin for mobile */
+        }
+
+        .dark-mode .dashboard-title {
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Single column for mobile */
+            gap: 12px; /* Reduced gap for mobile */
+            margin-bottom: 24px; /* Reduced margin */
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px; /* More rounded for mobile */
+            padding: 20px; /* Reduced padding */
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .stat-card {
+            background: #1f2937;
+        }
+
+        .stat-label {
+            font-size: 16px; /* Larger for readability */
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .dark-mode .stat-label {
+            color: #9ca3af;
+        }
+
+        .stat-value {
+            font-size: 28px; /* Smaller but still readable */
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .dark-mode .stat-value {
+            color: #60a5fa;
+        }
+
+        .start-review-button {
+            display: block;
+            width: 100%;
+            max-width: 240px; /* Wider for easier tapping */
+            margin: 24px auto 0; /* Reduced margin */
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 500;
+            padding: 16px 24px; /* Larger touch target */
+            border-radius: 12px; /* More rounded for mobile */
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            font-size: 16px; /* Larger text */
+        }
+
+        .start-review-button:hover {
+            background-color: #2563eb;
+        }
+
+        /* Review Screen */
+        .review-title {
+            font-size: 20px; /* Smaller for mobile */
+            font-weight: bold;
+            margin-bottom: 16px; /* Reduced margin */
+            color: #1f2937;
+        }
+
+        .dark-mode .review-title {
+            color: white;
+        }
+
+        .progress-info {
+            color: #6b7280;
+            margin-bottom: 16px; /* Reduced margin */
+            font-size: 16px; /* Larger for readability */
+        }
+
+        .dark-mode .progress-info {
+            color: #9ca3af;
+        }
+
+        .flashcard-container {
+            height: 220px; /* Smaller for mobile */
+            position: relative;
+            margin-bottom: 24px; /* Reduced margin */
+            perspective: 1000px;
+        }
+
+        .flashcard {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px; /* More rounded for mobile */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; /* Reduced padding */
+            text-align: center;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .flashcard {
+            background: #1f2937;
+        }
+
+        .flashcard-text {
+            font-size: 20px; /* Optimized for readability */
+            color: #1f2937;
+            line-height: 1.4; /* Better line height */
+        }
+
+        .dark-mode .flashcard-text {
+            color: white;
+        }
+
+        .flip-instruction {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 20px; /* Reduced margin */
+            font-size: 16px; /* Larger for readability */
+        }
+
+        .dark-mode .flip-instruction {
+            color: #9ca3af;
+        }
+
+        .rating-buttons {
+            display: grid;
+            grid-template-columns: 1fr; /* Stack buttons vertically for mobile */
+            gap: 10px; /* Reduced gap for mobile */
+        }
+
+        .rating-button {
+            padding: 16px; /* Larger touch target */
+            border-radius: 12px; /* More rounded for mobile */
+            color: white;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            font-size: 16px; /* Larger text */
+        }
+
+        .rating-button:hover {
+            opacity: 0.9;
+        }
+
+        .rating-again { background-color: #ef4444; }
+        .rating-hard { background-color: #f97316; }
+        .rating-good { background-color: #3b82f6; }
+        .rating-easy { background-color: #10b981; }
+
+        /* Tags Screen */
+        .tags-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 24px; /* Reduced margin for mobile */
+        }
+
+        .dark-mode .tags-title {
+            color: white;
+        }
+
+        .tags-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two columns for mobile */
+            gap: 10px; /* Larger gap for mobile */
+        }
+
+        .tag-item {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 12px; /* Larger padding */
+            border-radius: 8px; /* More rounded */
+            text-align: center;
+            font-size: 16px; /* Larger for readability */
+            min-height: 44px; /* Minimum touch target size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dark-mode .tag-item {
+            background: #1e3a8a;
+            color: #bfdbfe;
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 480px) {
+            .iphone-frame {
+                width: 100%;
+                height: 700px; /* Adjusted for smaller screens */
+                max-width: 400px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr; /* Always single column on small screens */
+            }
+
+            .rating-buttons {
+                grid-template-columns: 1fr; /* Always stack vertically on small screens */
+            }
+
+            .tags-grid {
+                grid-template-columns: 1fr; /* Single column on very small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Home Screen -->
+        <div>
+            <div class="screen-title">sc01 - Home Screen</div>
+            <div class="iphone-frame">
+                <div class="iphone-notch"></div>
+                <div class="iphone-screen dark-mode">
+                    <header class="header">
+                        <div class="nav-container">
+                            <div class="logo">Phraser</div>
+                            <div class="hamburger" onclick="toggleMobileMenu()">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="nav-links">
+                                <a href="#" class="nav-link active">Translate</a>
+                                <a href="#" class="nav-link">Browse</a>
+                                <a href="#" class="nav-link">Review</a>
+                                <a href="#" class="nav-link">Stats</a>
+                                <a href="#" class="nav-link">Tags</a>
+                            </div>
+                        </div>
+                        <div class="mobile-menu" id="mobileMenu">
+                            <div class="mobile-nav-links">
+                                <a href="#" class="mobile-nav-link active" onclick="closeMobileMenu()">Translate</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Browse</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Review</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Stats</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Tags</a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main class="main-content">
+                        <h1 class="home-title">Phraser</h1>
+                        <p class="home-subtitle">Language learning with spaced repetition</p>
+
+                        <div style="margin-bottom: 24px; text-align: center;">
+                            <a href="#" class="browse-button">Browse Saved Phrases</a>
+                        </div>
+
+                        <div class="translation-input">
+                            <div class="language-selectors">
+                                <div>
+                                    <label class="selector-label">From</label>
+                                    <select class="selector">
+                                        <option>English</option>
+                                        <option>Spanish</option>
+                                        <option>French</option>
+                                        <option>German</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="selector-label">To</label>
+                                    <select class="selector">
+                                        <option>Spanish</option>
+                                        <option>English</option>
+                                        <option>French</option>
+                                        <option>German</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="input-area">
+                                <label class="input-label">Phrase to translate</label>
+                                <div style="position: relative;">
+                                    <textarea class="textarea" placeholder="Enter text to translate...">Hello, how are you?</textarea>
+                                    <button class="paste-button">Paste</button>
+                                </div>
+                            </div>
+
+                            <button class="translate-button">Translate</button>
+
+                            <div class="translation-result">
+                                <div class="result-label">Translation:</div>
+                                <div class="result-text">¡Hola, ¿cómo estás?</div>
+
+                                <div style="margin-top: 16px;">
+                                    <label class="input-label">Add Tags (optional)</label>
+                                    <div style="display: flex; margin-bottom: 12px;">
+                                        <input type="text" class="textarea" style="flex: 1; border-top-right-radius: 0; border-bottom-right-radius: 0;" placeholder="Type a tag and press Enter...">
+                                        <button style="background: #e5e7eb; border: 1px solid #d1d5db; border-left: none; border-top-right-radius: 8px; border-bottom-right-radius: 8px; padding: 14px 16px; font-size: 16px;">Add</button>
+                                    </div>
+
+                                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+                                        <span style="display: inline-flex; align-items: center; padding: 8px 12px; background: #dbeafe; color: #1d4ed8; border-radius: 20px; font-size: 14px; min-height: 44px; align-items: center;">
+                                            greeting
+                                            <button style="margin-left: 6px; color: #dc2626; font-size: 18px; line-height: 1;">×</button>
+                                        </span>
+                                        <span style="display: inline-flex; align-items: center; padding: 8px 12px; background: #dbeafe; color: #1d4ed8; border-radius: 20px; font-size: 14px; min-height: 44px; align-items: center;">
+                                            spanish
+                                            <button style="margin-left: 6px; color: #dc2626; font-size: 18px; line-height: 1;">×</button>
+                                        </span>
+                                    </div>
+
+                                    <div style="text-align: right;">
+                                        <button style="background: #10b981; color: white; font-weight: 500; padding: 12px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 16px; min-height: 44px;">Save Phrase</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <!-- Browse Phrases Screen -->
+        <div>
+            <div class="screen-title">sc02 - Browse Phrases</div>
+            <div class="iphone-frame">
+                <div class="iphone-notch"></div>
+                <div class="iphone-screen dark-mode">
+                    <header class="header">
+                        <div class="nav-container">
+                            <div class="logo">Phraser</div>
+                            <div class="hamburger" onclick="toggleMobileMenu()">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="nav-links">
+                                <a href="#" class="nav-link">Translate</a>
+                                <a href="#" class="nav-link active">Browse</a>
+                                <a href="#" class="nav-link">Review</a>
+                                <a href="#" class="nav-link">Stats</a>
+                                <a href="#" class="nav-link">Tags</a>
+                            </div>
+                        </div>
+                        <div class="mobile-menu" id="mobileMenu">
+                            <div class="mobile-nav-links">
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Translate</a>
+                                <a href="#" class="mobile-nav-link active" onclick="closeMobileMenu()">Browse</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Review</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Stats</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Tags</a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main class="main-content">
+                        <h1 class="browse-title">Saved Phrases</h1>
+
+                        <div style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+                                <input type="text" placeholder="Search source or translation..." style="width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px;">
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+                                <select style="width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; background: white; color: #1f2937; appearance: none; background-image: url('data:image/svg+xml,%3csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 20 20%22%3e%3cpath stroke=%22%236b7280%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%221.5%22 d=%22M6 8l4 4 4-4%22/%3e%3c/svg%3e'); background-position: right 12px center; background-repeat: no-repeat; background-size: 16px; padding-right: 40px;">
+                                    <option>All Language Pairs</option>
+                                    <option>English → Spanish</option>
+                                    <option>Spanish → English</option>
+                                </select>
+
+                                <div style="width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 8px; background: #f9fafb; max-height: 100px; overflow-y: auto; font-size: 16px;">
+                                    <label style="display: inline-flex; align-items: center; margin-right: 10px; margin-bottom: 8px;">
+                                        <input type="checkbox" style="width: 18px; height: 18px;"> <span style="margin-left: 6px; font-size: 14px;">greeting</span>
+                                    </label>
+                                    <label style="display: inline-flex; align-items: center; margin-right: 10px; margin-bottom: 8px;">
+                                        <input type="checkbox" style="width: 18px; height: 18px;"> <span style="margin-left: 6px; font-size: 14px;">basics</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 16px; color: #6b7280;">Showing 3 of 3 phrases</div>
+                            <button style="padding: 12px 16px; background: #8b5cf6; color: white; border-radius: 8px; font-size: 14px; border: none; min-height: 44px;">Export to Anki</button>
+                        </div>
+
+                        <!-- Card-based layout for phrases -->
+                        <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 16px;">
+                            <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                                <div style="display: flex; justify-content: space-between; align-items-start; margin-bottom: 8px;">
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">English</div>
+                                        <div style="font-size: 18px; color: #1f2937; font-weight: 500;">Hello, how are you?</div>
+                                    </div>
+                                    <button style="color: #dc2626; font-size: 16px; padding: 8px; min-width: 44px; min-height: 44px;">Delete</button>
+                                </div>
+                                <div style="border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 12px;">
+                                    <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">Spanish</div>
+                                    <div style="font-size: 18px; color: #1f2937; font-weight: 500;">¡Hola, ¿cómo estás?</div>
+                                </div>
+                                <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <span style="display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1d4ed8; border-radius: 16px; font-size: 12px;">greeting</span>
+                                    <span style="display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1d4ed8; border-radius: 16px; font-size: 12px;">basics</span>
+                                </div>
+                            </div>
+
+                            <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                                <div style="display: flex; justify-content: space-between; align-items-start; margin-bottom: 8px;">
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">English</div>
+                                        <div style="font-size: 18px; color: #1f2937; font-weight: 500;">Good morning</div>
+                                    </div>
+                                    <button style="color: #dc2626; font-size: 16px; padding: 8px; min-width: 44px; min-height: 44px;">Delete</button>
+                                </div>
+                                <div style="border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 12px;">
+                                    <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">Spanish</div>
+                                    <div style="font-size: 18px; color: #1f2937; font-weight: 500;">Buenos días</div>
+                                </div>
+                                <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <span style="display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1d4ed8; border-radius: 16px; font-size: 12px;">greeting</span>
+                                </div>
+                            </div>
+
+                            <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                                <div style="display: flex; justify-content: space-between; align-items-start; margin-bottom: 8px;">
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">English</div>
+                                        <div style="font-size: 18px; color: #1f2937; font-weight: 500;">Thank you very much</div>
+                                    </div>
+                                    <button style="color: #dc2626; font-size: 16px; padding: 8px; min-width: 44px; min-height: 44px;">Delete</button>
+                                </div>
+                                <div style="border-top: 1px solid #e5e7eb; padding-top: 12px; margin-top: 12px;">
+                                    <div style="font-size: 14px; color: #6b7280; margin-bottom: 4px;">Spanish</div>
+                                    <div style="font-size: 18px; color: #1f2937; font-weight: 500;">Muchas gracias</div>
+                                </div>
+                                <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px;">
+                                    <span style="display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1d4ed8; border-radius: 16px; font-size: 12px;">politeness</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; margin-top: 16px;">
+                            <button style="padding: 12px 16px; background: #e5e7eb; color: #6b7280; border-radius: 8px; border: none; cursor: not-allowed; min-height: 44px;">Previous</button>
+                            <span style="line-height: 44px; color: #374151; font-size: 16px;">Page 1 of 1</span>
+                            <button style="padding: 12px 16px; background: #e5e7eb; color: #6b7280; border-radius: 8px; border: none; cursor: not-allowed; min-height: 44px;">Next</button>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div>
+            <div class="screen-title">sc03 - Dashboard</div>
+            <div class="iphone-frame">
+                <div class="iphone-notch"></div>
+                <div class="iphone-screen dark-mode">
+                    <header class="header">
+                        <div class="nav-container">
+                            <div class="logo">Phraser</div>
+                            <div class="hamburger" onclick="toggleMobileMenu()">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="nav-links">
+                                <a href="#" class="nav-link">Translate</a>
+                                <a href="#" class="nav-link">Browse</a>
+                                <a href="#" class="nav-link">Review</a>
+                                <a href="#" class="nav-link active">Stats</a>
+                                <a href="#" class="nav-link">Tags</a>
+                            </div>
+                        </div>
+                        <div class="mobile-menu" id="mobileMenu">
+                            <div class="mobile-nav-links">
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Translate</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Browse</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Review</a>
+                                <a href="#" class="mobile-nav-link active" onclick="closeMobileMenu()">Stats</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Tags</a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main class="main-content">
+                        <h1 class="dashboard-title">Review Statistics</h1>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Cards</div>
+                                <div class="stat-value">42</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Due Today</div>
+                                <div class="stat-value">15</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Reviewed Today</div>
+                                <div class="stat-value">8</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Current Streak</div>
+                                <div class="stat-value">7 days</div>
+                            </div>
+                        </div>
+
+                        <div style="background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 16px;">
+                            <div class="stat-label">Last Review</div>
+                            <div style="font-size: 18px; color: #1f2937; font-weight: 600;">Jan 15, 2026</div>
+                        </div>
+
+                        <a href="#" class="start-review-button">Start Review Session</a>
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Screen -->
+        <div>
+            <div class="screen-title">sc04 - Review</div>
+            <div class="iphone-frame">
+                <div class="iphone-notch"></div>
+                <div class="iphone-screen dark-mode">
+                    <header class="header">
+                        <div class="nav-container">
+                            <div class="logo">Phraser</div>
+                            <div class="hamburger" onclick="toggleMobileMenu()">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="nav-links">
+                                <a href="#" class="nav-link">Translate</a>
+                                <a href="#" class="nav-link">Browse</a>
+                                <a href="#" class="nav-link active">Review</a>
+                                <a href="#" class="nav-link">Stats</a>
+                                <a href="#" class="nav-link">Tags</a>
+                            </div>
+                        </div>
+                        <div class="mobile-menu" id="mobileMenu">
+                            <div class="mobile-nav-links">
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Translate</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Browse</a>
+                                <a href="#" class="mobile-nav-link active" onclick="closeMobileMenu()">Review</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Stats</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Tags</a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main class="main-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h1 class="review-title">Flashcard Review</h1>
+                            <span class="progress-info">1 / 15</span>
+                        </div>
+
+                        <div class="flashcard-container">
+                            <div class="flashcard">
+                                <div class="flashcard-text">¿Cómo estás?</div>
+                            </div>
+                        </div>
+
+                        <div class="flip-instruction">Tap card to flip</div>
+
+                        <div class="rating-buttons">
+                            <button class="rating-button rating-again">Again</button>
+                            <button class="rating-button rating-hard">Hard</button>
+                            <button class="rating-button rating-good">Good</button>
+                            <button class="rating-button rating-easy">Easy</button>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tags Screen -->
+        <div>
+            <div class="screen-title">sc05 - Tags</div>
+            <div class="iphone-frame">
+                <div class="iphone-notch"></div>
+                <div class="iphone-screen dark-mode">
+                    <header class="header">
+                        <div class="nav-container">
+                            <div class="logo">Phraser</div>
+                            <div class="hamburger" onclick="toggleMobileMenu()">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="nav-links">
+                                <a href="#" class="nav-link">Translate</a>
+                                <a href="#" class="nav-link">Browse</a>
+                                <a href="#" class="nav-link">Review</a>
+                                <a href="#" class="nav-link">Stats</a>
+                                <a href="#" class="nav-link active">Tags</a>
+                            </div>
+                        </div>
+                        <div class="mobile-menu" id="mobileMenu">
+                            <div class="mobile-nav-links">
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Translate</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Browse</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Review</a>
+                                <a href="#" class="mobile-nav-link" onclick="closeMobileMenu()">Stats</a>
+                                <a href="#" class="mobile-nav-link active" onclick="closeMobileMenu()">Tags</a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main class="main-content">
+                        <h1 class="tags-title">All Tags</h1>
+
+                        <div class="tags-grid">
+                            <div class="tag-item">greeting</div>
+                            <div class="tag-item">basics</div>
+                            <div class="tag-item">travel</div>
+                            <div class="tag-item">food</div>
+                            <div class="tag-item">family</div>
+                            <div class="tag-item">work</div>
+                            <div class="tag-item">shopping</div>
+                            <div class="tag-item">numbers</div>
+                            <div class="tag-item">time</div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.remove('active');
+        }
+
+        // Close menu when clicking outside of it
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const hamburger = document.querySelector('.hamburger');
+
+            if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
