@@ -15,8 +15,8 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const { page, limit, tag } = getPhrasesSchema.parse({
-      page: searchParams.get('page'),
-      limit: searchParams.get('limit'),
+      page: searchParams.get('page') || undefined,
+      limit: searchParams.get('limit') || undefined,
       tag: searchParams.get('tag') || undefined,
     });
 
