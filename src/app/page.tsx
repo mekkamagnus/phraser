@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import TranslationInput from '@/components/TranslationInput';
 
 export default function Home() {
@@ -10,6 +11,16 @@ export default function Home() {
         <p className="text-center text-gray-600 dark:text-gray-300 mb-8">
           Language learning with spaced repetition
         </p>
+
+        <div className="mb-6 text-center">
+          <Link
+            href="/browse"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            Browse Saved Phrases
+          </Link>
+        </div>
+
         <TranslationInput />
       </div>
     </main>

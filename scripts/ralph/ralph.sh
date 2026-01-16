@@ -96,7 +96,7 @@ for i in $(seq 1 $MAX_ITERATIONS); do
   # Run Qwen Code with the ralph prompt (non-interactive mode)
   # Save output to temp file for completion check
   TEMP_OUTPUT=$(mktemp)
-  cd "$PROJECT_ROOT" && cat "$SCRIPT_DIR/prompt.md" | qwen -p --dangerously-skip-permissions --allowed-tools "Read,Write,Edit,Glob,Grep,AskUserQuestion,Bash,TodoWrite" 2>&1 | tee "$TEMP_OUTPUT"
+  cd "$PROJECT_ROOT" && cat "$SCRIPT_DIR/prompt.md" | qwen -p --yolo --allowed-tools "Read,Write,Edit,Glob,Grep,AskUserQuestion,Bash,TodoWrite" 2>&1 | tee "$TEMP_OUTPUT"
 
   # Check for completion signal
   if grep -q "<promise>COMPLETE</promise>" "$TEMP_OUTPUT"; then

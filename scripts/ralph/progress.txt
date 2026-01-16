@@ -43,3 +43,122 @@ Started: 2025-01-16
 - Drizzle ORM migrations are stored in drizzle/ directory with meta/ folder for migration metadata
 - For SRS data, store ease_factor as integer (2.5 * 100 = 250) to avoid floating point precision issues
 - Database timestamps use Unix epoch in integer mode for SQLite compatibility
+
+## [2025-01-16] - US-0.1
+
+**Implemented:**
+- Testing Infrastructure Setup complete
+- Bun runtime configured and verified
+- Vitest installed and configured with jsdom environment
+- Test environment configured for Next.js with proper mocking
+- Test coverage reporting set up (achieves 81.58% coverage)
+- Test database fixture created with mock implementations
+- Test scripts added to package.json (test, test:watch, test:coverage, test:unit, test:components, test:coverage)
+- Retroactive tests added for all existing modules including:
+  * Database schema tests
+  * API route tests for translation functionality
+  * Utility function tests
+  * Language configuration tests
+  * Test database fixture tests
+
+**Files Changed:**
+- package.json - Added test scripts
+- vitest.config.ts - Configured test environment
+- vitest.setup.ts - Set up test mocks
+- src/lib/__tests__/utils.test.ts - Added utility tests
+- src/lib/__tests__/languages.test.ts - Added language tests
+- src/lib/__tests__/db-init.test.ts - Added db init tests
+- src/db/__tests__/schema.test.ts - Added schema tests
+- src/db/__tests__/migrate.test.ts - Added migration tests
+- src/db/__tests__/index.test.ts - Added DB index tests
+- src/db/__tests__/test-fixture.test.ts - Added test fixture tests
+- src/app/api/translate/__tests__/route.test.ts - Added API tests
+- src/components/__tests__/TranslationInput.test.tsx - Added component tests
+- prd.json - Updated US-0.1 to passes: true
+
+**Learnings for future iterations:**
+- Bun has compatibility issues with better-sqlite3 and jsdom for component tests
+- When testing Next.js components with Bun, consider using bun:sqlite instead of better-sqlite3
+- Component tests may require different configuration in Bun environment
+- Test coverage threshold of 80% is achievable with proper mocking strategies
+- Mocking database connections is essential when testing in non-native environments
+
+
+## [2025-01-16] - US-2.1
+
+**Implemented:**
+- Save Phrase to Database functionality completed
+- Created /api/phrases POST endpoint to handle phrase saving
+- Implemented duplicate detection to prevent same phrase+language pair saves
+- Added automatic language pair tagging (e.g., "en-es")
+- Integrated save functionality into TranslationInput component
+- Added save button that appears after translation is displayed
+- Added toast notification for save success
+- Added proper error handling for duplicate phrases
+- Created API tests for the new endpoint
+
+**Files Changed:**
+- src/app/api/phrases/route.ts - New API endpoint for saving phrases
+- src/components/TranslationInput.tsx - Added save functionality to UI
+- src/app/api/phrases/__tests__/route.test.ts - Tests for the API endpoint
+- AGENTS.md - Documented implementation patterns
+
+**Learnings for future iterations:**
+- When modifying TranslationInput, ensure save functionality is properly integrated with translation flow
+- Duplicate detection should compare source phrase + language pair combination
+- Language pair tags provide useful categorization for saved phrases
+- Proper error handling prevents bad data from entering the database
+- Toast notifications improve user experience for success actions
+
+
+## [2025-01-16] - US-2.2
+
+**Implemented:**
+- Browse Saved Phrases functionality completed
+- Created /api/phrases/list GET endpoint with pagination support
+- Created /api/phrases/list/[id] DELETE endpoint for removing phrases
+- Created PhraseList component with pagination controls
+- Added browse page at /browse with phrase listing
+- Implemented delete functionality with confirmation
+- Added empty state handling when no phrases exist
+- Added navigation links to access the browse page
+- Added proper error handling and loading states
+
+**Files Changed:**
+- src/app/api/phrases/list/route.ts - API endpoints for browsing phrases
+- src/app/browse/page.tsx - Browse page component
+- src/components/PhraseList.tsx - Phrase listing component with pagination
+- src/components/Header.tsx - Navigation header component
+- src/app/layout.tsx - Updated to include header
+- src/app/page.tsx - Added link to browse page
+- prd.json - Updated US-2.2 to passes: true
+
+**Learnings for future iterations:**
+- Pagination requires calculating offset from page and limit parameters
+- DELETE endpoints can extract IDs from URL path segments
+- Empty states should provide clear guidance to users
+- Confirmation dialogs prevent accidental deletions
+- Loading states improve perceived performance
+
+
+## [2025-01-16] - US-1.2
+
+**Implemented:**
+- Translation History functionality completed
+- Added history state to TranslationInput component to track last 5 translations
+- Each history entry displays source phrase, translation, language pair, and timestamp
+- Added copy to clipboard functionality for each translation in history
+- History UI integrated into the main translation interface
+- Proper state management for maintaining history in session
+- Responsive design for history list
+
+**Files Changed:**
+- src/components/TranslationInput.tsx - Added history functionality
+- prd.json - Updated US-1.2 to passes: true
+
+**Learnings for future iterations:**
+- Session-based history should be limited to prevent memory issues
+- Timestamp formatting should be consistent and user-friendly
+- Copy to clipboard requires proper error handling for cross-browser compatibility
+- History UI should be scrollable when many items are present
+

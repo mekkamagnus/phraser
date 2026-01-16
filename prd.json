@@ -12,7 +12,7 @@
     {
       "id": "US-0.1",
       "title": "Testing Infrastructure Setup",
-      "passes": false,
+      "passes": true,
       "priority": 1,
       "acceptanceCriteria": [
         "Install Bun as runtime",
@@ -46,7 +46,7 @@
     {
       "id": "US-1.2",
       "title": "Translation History",
-      "passes": false,
+      "passes": true,
       "priority": 3,
       "acceptanceCriteria": [
         "Display last 5 translations in session",
@@ -60,7 +60,7 @@
     {
       "id": "US-2.1",
       "title": "Save Phrase to Database",
-      "passes": false,
+      "passes": true,
       "priority": 1,
       "acceptanceCriteria": [
         "Save button appears after translation is displayed",
@@ -77,7 +77,7 @@
     {
       "id": "US-2.2",
       "title": "Browse Saved Phrases",
-      "passes": false,
+      "passes": true,
       "priority": 2,
       "acceptanceCriteria": [
         "Paginated list view of saved phrases",

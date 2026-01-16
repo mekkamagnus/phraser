@@ -1,11 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LANGUAGES, getLanguageCodes, type LanguageCode } from '@/lib/languages';
 
 interface TranslationResult {
   translation?: string;
   error?: string;
+}
+
+interface HistoryItem {
+  id: number;
+  sourcePhrase: string;
+  translation: string;
+  sourceLanguage: LanguageCode;
+  targetLanguage: LanguageCode;
+  timestamp: Date;
 }
 
 export default function TranslationInput() {
@@ -14,7 +23,10 @@ export default function TranslationInput() {
   const [targetLanguage, setTargetLanguage] = useState<LanguageCode>('es');
   const [translation, setTranslation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [history, setHistory] = useState<HistoryItem[]>([]);
 
   const handleTranslate = async () => {
     if (!phrase.trim()) {
@@ -25,6 +37,7 @@ export default function TranslationInput() {
     setIsLoading(true);
     setError('');
     setTranslation('');
+    setSaveSuccess(false);
 
     try {
       const response = await fetch('/api/translate', {
@@ -47,6 +60,18 @@ export default function TranslationInput() {
 
       if (data.translation) {
         setTranslation(data.translation);
+
+        // Add to history
+        const newHistoryItem: HistoryItem = {
+          id: Date.now(), // Simple ID generation
+          sourcePhrase: phrase,
+          translation: data.translation,
+          sourceLanguage,
+          targetLanguage,
+          timestamp: new Date(),
+        };
+
+        setHistory(prev => [newHistoryItem, ...prev].slice(0, 5)); // Keep only last 5
       } else {
         throw new Error('No translation received');
       }
@@ -57,12 +82,68 @@ export default function TranslationInput() {
     }
   };
 
+  const handleSave = async () => {
+    if (!phrase.trim() || !translation.trim()) {
+      setError('Nothing to save');
+      return;
+    }
+
+    setIsSaving(true);
+    setError('');
+    setSaveSuccess(false);
+
+    try {
+      const response = await fetch('/api/phrases', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sourcePhrase: phrase,
+          translation,
+          sourceLanguage,
+          targetLanguage,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          setError('This phrase is already saved with this language pair');
+        } else {
+          throw new Error(data.error || 'Failed to save phrase');
+        }
+        return;
+      }
+
+      setSaveSuccess(true);
+      // Clear success message after 3 seconds
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred while saving');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
       setPhrase(text);
     } catch (err) {
       setError('Unable to paste from clipboard');
+    }
+  };
+
+  const handleCopyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      // Optionally show a success message
+      alert('Copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+      alert('Failed to copy to clipboard');
     }
   };
 
@@ -156,6 +237,59 @@ export default function TranslationInput() {
             <p className="text-lg text-gray-900 dark:text-white font-medium">
               {translation}
             </p>
+
+            {/* Save Button */}
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              >
+                {isSaving ? 'Saving...' : 'Save Phrase'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Save Success Message */}
+        {saveSuccess && (
+          <div className="bg-green-100 dark:bg-green-800/30 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-400 px-4 py-2 rounded-md text-sm">
+            Phrase saved successfully!
+          </div>
+        )}
+
+        {/* Translation History */}
+        {history.length > 0 && (
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+            <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">
+              Recent Translations
+            </h3>
+            <div className="space-y-3 max-h-60 overflow-y-auto">
+              {history.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-gray-50 dark:bg-gray-700 p-3 rounded-md border border-gray-200 dark:border-gray-600"
+                >
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-gray-800 dark:text-gray-200 truncate">
+                        <span className="font-medium">{item.sourcePhrase}</span> → {item.translation}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {LANGUAGES[item.sourceLanguage]} → {LANGUAGES[item.targetLanguage]} •{' '}
+                        {item.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleCopyToClipboard(item.translation)}
+                      className="ml-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

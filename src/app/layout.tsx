@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ensureMigrations } from "@/lib/db-init";
+import Header from "@/components/Header";
 
 // Run migrations on app startup
 ensureMigrations().catch((err) => {
@@ -20,7 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        {children}
+        <Header />
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   );

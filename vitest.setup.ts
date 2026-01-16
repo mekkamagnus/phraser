@@ -43,7 +43,3 @@ vi.mock('next/navigation', () => ({
   useParams: vi.fn(() => ({})),
 }));
 
-// Mock next/image
-vi.mock('next/image', () => ({
-  default: ({ ...props }: any) => <img {...props} />,
-}));
