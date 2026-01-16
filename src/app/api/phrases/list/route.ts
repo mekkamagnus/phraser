@@ -1,28 +1,41 @@
 import { NextRequest } from 'next/server';
 import { db } from '@/db';
 import { phrases, phraseTags, tags } from '@/db/schema';
-import { eq, desc, and, asc } from 'drizzle-orm';
+import { eq, desc, and, asc, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { createErrorResponse } from '@/lib/errorHandler';
 
 const getPhrasesSchema = z.object({
   page: z.string().transform(Number).optional().default(1),
   limit: z.string().transform(Number).optional().default(10),
+  tag: z.string().optional(),
 });
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const { page, limit } = getPhrasesSchema.parse({
+    const { page, limit, tag } = getPhrasesSchema.parse({
       page: searchParams.get('page'),
       limit: searchParams.get('limit'),
+      tag: searchParams.get('tag') || undefined,
     });
 
     // Calculate offset for pagination
     const offset = (page - 1) * limit;
 
+    // If tag filter is provided, first get the phrase IDs that have that tag
+    let phraseIdsWithTag: number[] | null = null;
+    if (tag) {
+      const taggedPhrases = await db
+        .select({ phraseId: phraseTags.phraseId })
+        .from(phraseTags)
+        .innerJoin(tags, eq(phraseTags.tagId, tags.id))
+        .where(eq(tags.name, tag));
+      phraseIdsWithTag = taggedPhrases.map(r => r.phraseId);
+    }
+
     // Fetch phrases with associated tags
-    const phraseRecords = await db
+    let query = db
       .select({
         id: phrases.id,
         sourcePhrase: phrases.sourcePhrase,
@@ -34,16 +47,26 @@ export async function GET(req: NextRequest) {
       })
       .from(phrases)
       .leftJoin(phraseTags, eq(phrases.id, phraseTags.phraseId))
-      .leftJoin(tags, eq(phraseTags.tagId, tags.id))
-      .orderBy(desc(phrases.createdAt), asc(phrases.id), asc(tags.name))
-      .limit(limit)
-      .offset(offset);
+      .leftJoin(tags, eq(phraseTags.tagId, tags.id));
+
+    // Apply tag filter if provided
+    const phraseRecords = phraseIdsWithTag !== null
+      ? await query
+          .where(phraseIdsWithTag.length > 0
+            ? sql`${phrases.id} IN (${sql.join(phraseIdsWithTag.map(id => sql`${id}`), sql`, `)})`
+            : sql`1 = 0`)
+          .orderBy(desc(phrases.createdAt), asc(phrases.id), asc(tags.name))
+          .limit(limit)
+          .offset(offset)
+      : await query
+          .orderBy(desc(phrases.createdAt), asc(phrases.id), asc(tags.name))
+          .limit(limit)
+          .offset(offset);
 
     // Get total count for pagination info
-    const totalCountResult = await db
-      .select({ count: phrases.id })
-      .from(phrases);
-    const totalCount = totalCountResult.length;
+    const totalCount = phraseIdsWithTag !== null
+      ? phraseIdsWithTag.length
+      : (await db.select({ count: phrases.id }).from(phrases)).length;
 
     // Group records by phrase ID to collect all tags for each phrase
     const groupedPhrases = new Map<number, {

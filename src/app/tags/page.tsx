@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 interface Tag {
   id: number;
@@ -60,12 +61,13 @@ export default function AllTagsPage() {
       ) : (
         <div className="grid grid-cols-2 gap-3"> {/* Changed to 2 columns for mobile with adjusted gap */}
           {tags.map((tag) => (
-            <div
+            <Link
               key={tag.id}
-              className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 p-4 rounded-xl text-center shadow text-base" // Increased padding, more rounded corners and font size for mobile
+              href={`/tags/${encodeURIComponent(tag.name)}`}
+              className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 p-4 rounded-xl text-center shadow text-base hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors cursor-pointer"
             >
               {tag.name}
-            </div>
+            </Link>
           ))}
         </div>
       )}

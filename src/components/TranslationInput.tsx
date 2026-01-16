@@ -5,6 +5,20 @@ import { LANGUAGES, getLanguageCodes, type LanguageCode } from '@/lib/languages'
 import { makeApiCall, NetworkErrorHandler } from '@/lib/networkErrorHandler';
 import { useToast } from '@/components/Toast';
 
+// localStorage keys for persisting language preferences
+const SOURCE_LANGUAGE_KEY = 'phraser_source_language';
+const TARGET_LANGUAGE_KEY = 'phraser_target_language';
+
+// Helper function to safely get a language from localStorage with validation
+function getStoredLanguage(key: string, defaultValue: LanguageCode): LanguageCode {
+  if (typeof window === 'undefined') return defaultValue;
+  const stored = localStorage.getItem(key);
+  if (stored && stored in LANGUAGES) {
+    return stored as LanguageCode;
+  }
+  return defaultValue;
+}
+
 interface TranslationResult {
   translation?: string;
   error?: string;
@@ -21,8 +35,12 @@ interface HistoryItem {
 
 export default function TranslationInput() {
   const [phrase, setPhrase] = useState('');
-  const [sourceLanguage, setSourceLanguage] = useState<LanguageCode>('en');
-  const [targetLanguage, setTargetLanguage] = useState<LanguageCode>('es');
+  const [sourceLanguage, setSourceLanguage] = useState<LanguageCode>(() =>
+    getStoredLanguage(SOURCE_LANGUAGE_KEY, 'en')
+  );
+  const [targetLanguage, setTargetLanguage] = useState<LanguageCode>(() =>
+    getStoredLanguage(TARGET_LANGUAGE_KEY, 'es')
+  );
   const [translation, setTranslation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -33,6 +51,15 @@ export default function TranslationInput() {
   const [tags, setTags] = useState<string[]>([]);
 
   const { addToast } = useToast();
+
+  // Persist language preferences to localStorage
+  useEffect(() => {
+    localStorage.setItem(SOURCE_LANGUAGE_KEY, sourceLanguage);
+  }, [sourceLanguage]);
+
+  useEffect(() => {
+    localStorage.setItem(TARGET_LANGUAGE_KEY, targetLanguage);
+  }, [targetLanguage]);
 
   const handleTranslate = async () => {
     if (!phrase.trim()) {
